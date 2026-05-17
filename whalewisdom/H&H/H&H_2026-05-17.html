@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H&amp;H 段永平 &mdash; 13F Holdings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#F4F2ED;color:#1B2635;font-family:'Karla',sans-serif;font-size:14px;line-height:1.45}
+.masthead{background:#1B2635;border-bottom:3px solid #B8870A;padding:28px 0 24px;position:relative;overflow:hidden}
+.masthead::after{content:'H\0026H';position:absolute;right:-20px;bottom:-30px;font-family:'Cormorant Garamond',serif;font-size:150px;font-weight:700;color:rgba(255,255,255,0.04);white-space:nowrap;pointer-events:none;letter-spacing:-2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#B8870A;text-transform:uppercase;margin-bottom:8px}
+.masthead-title{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:700;color:#fff;line-height:1.05;margin-bottom:8px}
+.masthead-title em{color:#D4A017;font-style:italic}
+.masthead-desc{font-size:14px;color:rgba(255,255,255,0.6);font-weight:300;max-width:820px;margin-bottom:12px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7)}
+.pill.amber{border-color:#B8870A;color:#D4A017}
+.stats-bar{background:#fff;border-bottom:1px solid #e2ddd6}
+.stats-bar .wrap{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid #e2ddd6}
+.stat{padding:11px 20px;border-right:1px solid #e2ddd6}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#999;margin-bottom:4px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#1B2635;line-height:1}
+.stat-sub{font-size:11px;color:#aaa;margin-top:3px}
+.section-hd{padding:24px 0 12px}
+.s-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.15em;color:#B8870A;text-transform:uppercase;margin-bottom:4px}
+.s-ttl{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;margin-bottom:6px}
+.s-div{width:44px;height:2px;background:#B8870A;margin-bottom:14px}
+.aum-chart{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:flex-end;padding:18px 20px 14px;background:#fff;border:1px solid #e2ddd6;min-height:180px}
+.aum-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+.aum-bar{width:100%;border-radius:2px 2px 0 0;min-height:4px}
+.aum-bar.solid{background:#1B2635}
+.aum-num{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;color:#1B2635}
+.aum-q{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#999}
+.chart-note{font-family:'JetBrains Mono',monospace;font-size:10px;color:#aaa;margin-top:8px}
+.qtabs{position:sticky;top:0;z-index:100;background:#1B2635;border-bottom:2px solid #B8870A}
+.qtabs .wrap{display:flex;overflow-x:auto;scrollbar-width:none}
+.qbtn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;padding:14px 20px;color:rgba(255,255,255,0.45);background:none;border:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s}
+.qbtn:hover{color:rgba(255,255,255,0.75)}
+.qbtn.active{color:#D4A017;border-bottom-color:#D4A017}
+.qtag{display:inline-block;margin-left:6px;font-size:9px;padding:1px 5px;border-radius:2px;background:rgba(184,135,10,0.2);color:#D4A017}
+.qsec{display:none}
+.qsec.active{display:block}
+.qmeta{background:#fff;border:1px solid #e2ddd6;padding:12px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.qm-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#999;margin-bottom:2px}
+.qm-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:500;color:#1B2635;line-height:1.1}
+.qm-sub{font-size:11px;color:#aaa;margin-top:2px}
+.tbl-wrap{background:#fff;border:1px solid #e2ddd6;overflow:hidden;margin-bottom:12px}
+.tbl-hd{padding:8px 16px;border-bottom:1px solid #e2ddd6;display:flex;align-items:center;justify-content:space-between}
+.tbl-hd-txt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#777}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#1B2635}
+thead th{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.6);padding:7px 12px;text-align:left;font-weight:400;white-space:nowrap}
+th.r,td.r{text-align:right}
+tbody tr{border-bottom:1px solid #f0ede8;transition:background .1s}
+tbody tr:hover{background:#faf9f6}
+tbody tr.closed{opacity:.45}
+td{padding:6px 12px;vertical-align:middle}
+td.r{font-family:'JetBrains Mono',monospace;font-size:12.5px}
+.tkr{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;color:#1B2635}
+.sbadge{font-size:10px;padding:2px 7px;border-radius:2px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;white-space:nowrap}
+.s-it{background:#dbeafe;color:#1d4ed8}
+.s-en{background:#fef3c7;color:#92400e}
+.s-fi{background:#dcfce7;color:#166534}
+.s-ut{background:#f3e8ff;color:#7e22ce}
+.s-cd{background:#fee2e2;color:#991b1b}
+.s-in{background:#e0f2fe;color:#0369a1}
+.s-hc{background:#fce7f3;color:#9d174d}
+.s-re{background:#d1fae5;color:#065f46}
+.s-cm{background:#ccfbf1;color:#0f766e}
+.s-cs{background:#ecfccb;color:#4d7c0f}
+.s-ma{background:#e7e5e4;color:#57534e}
+.s-tr{background:#e0e7ff;color:#4338ca}
+.pbar-row{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.pbar{height:4px;background:#1B2635;border-radius:2px;min-width:2px;flex-shrink:0}
+.pval{font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap}
+.stbadge{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.04em;text-transform:uppercase}
+.st-new{background:rgba(184,135,10,.12);color:#92400e}
+.st-add{background:rgba(22,163,74,.1);color:#166534}
+.st-red{background:rgba(234,88,12,.1);color:#c2410c}
+.st-cls{background:rgba(220,38,38,.1);color:#991b1b}
+.st-nc{background:rgba(100,116,139,.1);color:#475569}
+.ch-new{color:#B8870A;font-weight:600}
+.ch-add{color:#16a34a}
+.ch-neg{color:#dc2626}
+.ch-nc{color:#888}
+.sfilter-bar{display:flex;gap:5px;flex-shrink:0}
+.sfbtn{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 9px;border-radius:2px;border:1px solid #d4cfc8;background:transparent;color:#aaa;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
+.sfbtn:hover{border-color:#B8870A;color:#B8870A}
+.sfbtn.active{background:#1B2635;color:#fff;border-color:#1B2635}
+.narr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.narr-card{background:#fff;border:1px solid #e2ddd6;border-left:3px solid #B8870A;padding:14px 16px}
+.narr-ttl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#B8870A;margin-bottom:6px}
+.narr-card p{font-size:13px;line-height:1.55;color:#333}
+.narr-card p+p{margin-top:5px}
+.footer{background:#1B2635;padding:16px 0;margin-top:32px;border-top:1px solid rgba(255,255,255,.08)}
+.footer .wrap{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.35);letter-spacing:.06em}
+@media(max-width:768px){
+  .stats-bar .wrap{grid-template-columns:repeat(2,1fr)}
+  .narr-grid{grid-template-columns:1fr}
+  .qmeta{grid-template-columns:repeat(2,1fr)}
+  .masthead-title{font-size:36px}
+  .aum-chart{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Institutional Holdings &middot; WhaleWisdom &middot; SEC 13F Filings</div>
+    <h1 class="masthead-title">H&amp;H <em>段永平</em></h1>
+    <p class="masthead-desc">段永平旗下 H&amp;H International Investment 的 13F 美股账户。极致集中的长期价值持有——AAPL 一股长期占组合一半以上。4 季度持仓演变（Q1 2025 → Q4 2025），13F 推算 AUM $12.0B → $17.5B。注：Q1 2026 申报尚未披露。</p>
+    <div class="pills">
+      <span class="pill amber">极致集中</span>
+      <span class="pill">长期持有</span>
+      <span class="pill">AAPL 单一过半</span>
+      <span class="pill">Buffett 风格</span>
+      <span class="pill">4 Quarters Tracked</span>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="wrap">
+    <div class="stat">
+      <div class="stat-lbl">最新 AUM（Q4 2025）</div>
+      <div class="stat-val">$17.49B</div>
+      <div class="stat-sub">vs Q3'25 +19%</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">追踪起点 AUM</div>
+      <div class="stat-val">$12B</div>
+      <div class="stat-sub">Q1 2025</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">追踪季度数</div>
+      <div class="stat-val">4Q</div>
+      <div class="stat-sub">2025-03-31 → 2025-12-31</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">核心持仓</div>
+      <div class="stat-val" style="font-size:22px;padding-top:3px">AAPL</div>
+      <div class="stat-sub">50.30% · Apple · 单一过半</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="section-hd">
+    <div class="s-lbl">资产规模演变</div>
+    <div class="s-ttl">AUM 轨迹</div>
+    <div class="s-div"></div>
+    <div class="aum-chart">
+      <div class="aum-col">
+        <div class="aum-num">$12B</div>
+        <div class="aum-bar solid" style="height:69px"></div>
+        <div class="aum-q">2025-03-31</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$11.53B</div>
+        <div class="aum-bar solid" style="height:66px"></div>
+        <div class="aum-q">2025-06-30</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$14.68B</div>
+        <div class="aum-bar solid" style="height:84px"></div>
+        <div class="aum-q">2025-09-30</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$17.49B</div>
+        <div class="aum-bar solid" style="height:100px"></div>
+        <div class="aum-q">2025-12-31</div>
+      </div>
+    </div>
+    <div class="chart-note">AUM 由第一大持仓市值 / 占比反推；仅含 13F 美股申报</div>
+  </div>
+</div>
+
+<div class="qtabs" id="qtabs">
+  <div class="wrap">
+    <button class="qbtn active" onclick="showQ('q4-2025',this)">2025-12-31 <span class="qtag">Q4</span></button>
+    <button class="qbtn" onclick="showQ('q3-2025',this)">2025-09-30 <span class="qtag">Q3</span></button>
+    <button class="qbtn" onclick="showQ('q2-2025',this)">2025-06-30 <span class="qtag">Q2</span></button>
+    <button class="qbtn" onclick="showQ('q1-2025',this)">2025-03-31 <span class="qtag">Q1'25</span></button>
+  </div>
+</div>
+
+<div class="wrap" style="padding-top:16px;padding-bottom:36px">
+
+<div class="qsec" id="q1-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-03-31</div><div class="qm-sub">Q1 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$12B</div><div class="qm-sub">首份追踪季度</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">11 / 0</div><div class="qm-sub">首份申报</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">AAPL</div><div class="qm-sub">63.33% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-03-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">34,224,181</td><td class="r">$7.6B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">63.33%</span></div></td><td class="r">70.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−6,640,396</td></tr>
+        <tr><td><span class="tkr">BRK.B</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">3,381,300</td><td class="r">$1.8B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:13px"></div><span class="pval">15.00%</span></div></td><td class="r">11.31%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−239,800</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">7,753,900</td><td class="r">$918M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">7.64%</span></div></td><td class="r">4.83%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+525,200</td></tr>
+        <tr><td><span class="tkr">OXY</span></td><td><span class="sbadge s-en">Energy</span></td><td class="r">13,826,100</td><td class="r">$682M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">5.69%</span></div></td><td class="r">4.62%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+249,100</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,982,130</td><td class="r">$527M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">4.39%</span></div></td><td class="r">3.18%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,468,700</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,110,600</td><td class="r">$174M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">1.45%</span></div></td><td class="r">4.94%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,655,900</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">299,200</td><td class="r">$112M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.94%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+299,200</td></tr>
+        <tr><td><span class="tkr">DIS</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">723,000</td><td class="r">$71M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.59%</span></div></td><td class="r">0.57%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−23,000</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">645,100</td><td class="r">$70M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.58%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+645,100</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">271,792</td><td class="r">$45M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.38%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+271,792</td></tr>
+        <tr><td><span class="tkr">MRNA</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">83,000</td><td class="r">$2M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.02%</span></div></td><td class="r">0.05%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−80,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q2-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-06-30</div><div class="qm-sub">Q2 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$11.53B</div><div class="qm-sub">vs $12B Q1 (-4%)</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">10 / 1</div><div class="qm-sub">本季清仓 1 只</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">AAPL</div><div class="qm-sub">62.47% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-06-30</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">35,118,607</td><td class="r">$7.21B</td><td class="r">$7.6B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">62.47%</span></div></td><td class="r">63.33%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+894,426</td></tr>
+        <tr><td><span class="tkr">BRK.B</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">3,381,300</td><td class="r">$1.64B</td><td class="r">$1.8B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">14.24%</span></div></td><td class="r">15.00%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">8,662,694</td><td class="r">$907M</td><td class="r">$918M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">7.86%</span></div></td><td class="r">7.64%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+908,794</td></tr>
+        <tr><td><span class="tkr">OXY</span></td><td><span class="sbadge s-en">Energy</span></td><td class="r">13,556,100</td><td class="r">$569M</td><td class="r">$682M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">4.94%</span></div></td><td class="r">5.69%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−270,000</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,746,230</td><td class="r">$425M</td><td class="r">$527M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">3.68%</span></div></td><td class="r">4.39%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−235,900</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,945,400</td><td class="r">$345M</td><td class="r">$174M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">2.99%</span></div></td><td class="r">1.45%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+834,800</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">964,800</td><td class="r">$152M</td><td class="r">$70M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">1.32%</span></div></td><td class="r">0.58%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+319,700</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">279,200</td><td class="r">$139M</td><td class="r">$112M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">1.20%</span></div></td><td class="r">0.94%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−20,000</td></tr>
+        <tr><td><span class="tkr">DIS</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">723,000</td><td class="r">$90M</td><td class="r">$71M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.78%</span></div></td><td class="r">0.59%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">259,984</td><td class="r">$59M</td><td class="r">$45M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.51%</span></div></td><td class="r">0.38%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−11,808</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Closed Out &mdash; Q2 2025（1 只）</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr class="closed"><td><span class="tkr">MRNA</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">0.02%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−83,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q3-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-09-30</div><div class="qm-sub">Q3 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$14.68B</div><div class="qm-sub">vs $11.53B Q2 (+27%)</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">11 / 0</div><div class="qm-sub">本季无清仓</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">AAPL</div><div class="qm-sub">60.42% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-09-30</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">34,829,107</td><td class="r">$8.87B</td><td class="r">$7.21B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">60.42%</span></div></td><td class="r">62.47%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−289,500</td></tr>
+        <tr><td><span class="tkr">BRK.B</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">5,191,300</td><td class="r">$2.61B</td><td class="r">$1.64B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:16px"></div><span class="pval">17.78%</span></div></td><td class="r">14.24%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,810,000</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">8,574,194</td><td class="r">$1.13B</td><td class="r">$907M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">7.72%</span></div></td><td class="r">7.86%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−88,500</td></tr>
+        <tr><td><span class="tkr">OXY</span></td><td><span class="sbadge s-en">Energy</span></td><td class="r">13,556,100</td><td class="r">$641M</td><td class="r">$569M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">4.36%</span></div></td><td class="r">4.94%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,777,330</td><td class="r">$496M</td><td class="r">$425M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">3.38%</span></div></td><td class="r">3.68%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−968,900</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,810,500</td><td class="r">$441M</td><td class="r">$345M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">3.00%</span></div></td><td class="r">2.99%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−134,900</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">279,200</td><td class="r">$145M</td><td class="r">$139M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.99%</span></div></td><td class="r">1.20%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">597,800</td><td class="r">$112M</td><td class="r">$152M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.76%</span></div></td><td class="r">1.32%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−367,000</td></tr>
+        <tr><td><span class="tkr">DIS</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">723,000</td><td class="r">$83M</td><td class="r">$90M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.56%</span></div></td><td class="r">0.78%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">ASML</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">80,000</td><td class="r">$77M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.53%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+80,000</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">259,984</td><td class="r">$73M</td><td class="r">$59M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.49%</span></div></td><td class="r">0.51%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec active" id="q4-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-12-31</div><div class="qm-sub">Q4 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$17.49B</div><div class="qm-sub">vs $14.68B Q3 (+19%)</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">14 / 0</div><div class="qm-sub">本季无清仓</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">AAPL</div><div class="qm-sub">50.30% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-12-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">32,358,507</td><td class="r">$8.8B</td><td class="r">$8.87B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">50.30%</span></div></td><td class="r">60.42%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,470,600</td></tr>
+        <tr><td><span class="tkr">BRK.B</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">7,176,196</td><td class="r">$3.61B</td><td class="r">$2.61B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:22px"></div><span class="pval">20.63%</span></div></td><td class="r">17.78%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,984,896</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">7,237,100</td><td class="r">$1.35B</td><td class="r">$112M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">7.72%</span></div></td><td class="r">0.76%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+6,639,300</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">11,536,694</td><td class="r">$1.31B</td><td class="r">$1.13B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">7.48%</span></div></td><td class="r">7.72%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,962,500</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,855,400</td><td class="r">$582M</td><td class="r">$441M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">3.33%</span></div></td><td class="r">3.00%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+44,900</td></tr>
+        <tr><td><span class="tkr">OXY</span></td><td><span class="sbadge s-en">Energy</span></td><td class="r">13,172,600</td><td class="r">$542M</td><td class="r">$641M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">3.10%</span></div></td><td class="r">4.36%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−383,500</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">859,000</td><td class="r">$415M</td><td class="r">$145M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">2.38%</span></div></td><td class="r">0.99%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+579,800</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,560,500</td><td class="r">$375M</td><td class="r">$496M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">2.15%</span></div></td><td class="r">3.38%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−216,830</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,224,384</td><td class="r">$372M</td><td class="r">$73M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">2.13%</span></div></td><td class="r">0.49%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+964,400</td></tr>
+        <tr><td><span class="tkr">DIS</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">712,000</td><td class="r">$81M</td><td class="r">$83M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.46%</span></div></td><td class="r">0.56%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−11,000</td></tr>
+        <tr><td><span class="tkr">CRWV</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">299,900</td><td class="r">$21M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.12%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+299,900</td></tr>
+        <tr><td><span class="tkr">CRDO</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">141,300</td><td class="r">$20M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.12%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+141,300</td></tr>
+        <tr><td><span class="tkr">ASML</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">9,900</td><td class="r">$11M</td><td class="r">$77M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.06%</span></div></td><td class="r">0.53%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−70,100</td></tr>
+        <tr><td><span class="tkr">TEM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">110,000</td><td class="r">$6M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.04%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+110,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section-hd">
+  <div class="s-lbl">投资叙事演变</div>
+  <div class="s-ttl">组合策略解读</div>
+  <div class="s-div"></div>
+</div>
+<div class="narr-grid">
+    <div class="narr-card">
+      <div class="narr-ttl">Q1 2025 · 起点：AAPL 一股独大 63%</div>
+      <p>13F 推算 AUM $12.0B，11 只持仓。AAPL 单一占 63.3% —— 接近组合三分之二；其后是 BRK.B 15.0%、PDD 7.6%、OXY 5.7%、BABA 4.4%。</p>
+      <p>本季新建 MSFT、NVDA、TSM 三只小仓科技股（合计占比很低，更像试探）。组合骨架是 AAPL + 伯克希尔 + PDD + 西方石油 —— 典型的段永平长期持有名单。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q1 → Q2 2025 · 组合极度稳定，AUM 微降</div>
+      <p>AUM $12.0B → $11.5B（−4%）。AAPL 62.5%、BRK.B 14.2%、PDD 7.9%、OXY 4.9% —— 排序与权重几乎纹丝不动。</p>
+      <p>本季唯一动作是清掉 MRNA（占比仅 0.02% 的尾仓）。这种"几乎不动"正是这个账户的常态。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q2 → Q3 2025 · 加仓伯克希尔，建仓 ASML</div>
+      <p>AUM $11.5B → $14.7B（+27%）。AAPL 仍 60.4% 稳居第一；BRK.B 增持 +54% 升至 17.8%。</p>
+      <p>本季新建 ASML —— 首次伸向半导体设备。组合仍高度集中，但 BRK.B 的加仓显示对"伯克希尔 + 苹果"双核的进一步倾斜。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q3 → Q4 2025 · AAPL 降到 50%，NVDA 暴力建仓</div>
+      <p>AUM $14.7B → $17.5B（+19%）。最大变化：AAPL 占比从 60% 降到 50.3%（小幅减股 −7%），BRK.B 升至 20.6%；NVDA 增持 +1,110% 至 7.7% 成第三大持仓。</p>
+      <p>MSFT +208%、TSM +371%，并新建 CRWV、CRDO、TEM。这是 4 个季度里第一次明确的科技 / AI 加注 —— 在 AAPL 之外搭出一条半导体腿。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">贯穿风格 · 段永平：极致集中、长期持有</div>
+      <p>H&H International Investment（段永平）的 13F 账户特征：① 极致集中 —— AAPL 单一长期占组合一半以上，前 5 大常年 90%+；② 极低换手 —— 4 个季度仅清仓 1 只（MRNA 尾仓），核心名单几乎不动；③ 名单是典型的"段永平 + Buffett 风格" —— AAPL、伯克希尔、西方石油（OXY，也是巴菲特重仓）、PDD（段永平早期支持的拼多多）。</p>
+      <p>唯一的趋势性变化是 2025 下半年在 AAPL 之外加了一条科技 / 半导体腿（NVDA / MSFT / TSM / ASML / CRWV）。注：Q1 2026 申报尚未披露；"AUM"由第一大持仓市值 / 占比反推；港股 / A 股持仓不在 13F 内。</p>
+    </div>
+</div>
+
+</div><!-- .wrap end -->
+
+<div class="footer">
+  <div class="wrap">
+    <span>H&amp;H · 段永平 — 13F HOLDINGS TRACKER</span>
+    <span>Data: WhaleWisdom / SEC 13F · Generated: 2026-05-17</span>
+  </div>
+</div>
+
+<script>
+function showQ(id, btn) {
+  document.querySelectorAll('.qsec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('qtabs').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+document.addEventListener('DOMContentLoaded', function() {
+  const filters = [
+    {label:'ALL', cls:''},
+    {label:'NEW', cls:'st-new'},
+    {label:'ADDED', cls:'st-add'},
+    {label:'REDUCED', cls:'st-red'},
+    {label:'NO CHANGE', cls:'st-nc'},
+  ];
+  document.querySelectorAll('.tbl-hd').forEach(function(hd) {
+    var txt = hd.querySelector('.tbl-hd-txt');
+    if (!txt || !txt.textContent.includes('Active Holdings')) return;
+    var table = hd.closest('.tbl-wrap').querySelector('table');
+    if (!table) return;
+    var bar = document.createElement('div');
+    bar.className = 'sfilter-bar';
+    filters.forEach(function(f, i) {
+      var btn = document.createElement('button');
+      btn.className = 'sfbtn' + (i === 0 ? ' active' : '');
+      btn.textContent = f.label;
+      btn.onclick = function() {
+        bar.querySelectorAll('.sfbtn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        table.querySelectorAll('tbody tr').forEach(function(row) {
+          if (!f.cls) { row.style.display = ''; return; }
+          var badge = row.querySelector('.stbadge');
+          row.style.display = (badge && badge.classList.contains(f.cls)) ? '' : 'none';
+        });
+      };
+      bar.appendChild(btn);
+    });
+    hd.appendChild(bar);
+  });
+});
+</script>
+</body>
+</html>
