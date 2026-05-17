@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>13F 决策深度分析 — Coatue & Situational Awareness LP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#F4F2ED;color:#1B2635;font-family:'Karla',sans-serif;font-size:14px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+
+/* MASTHEAD */
+.masthead{background:#1B2635;border-bottom:3px solid #B8870A;padding:34px 0 30px;position:relative;overflow:hidden}
+.masthead::after{content:'13F DECISION ANALYSIS';position:absolute;right:-30px;bottom:-34px;font-family:'Cormorant Garamond',serif;font-size:128px;font-weight:700;color:rgba(255,255,255,0.045);white-space:nowrap;pointer-events:none;letter-spacing:-2px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:#B8870A;text-transform:uppercase;margin-bottom:10px}
+.masthead-title{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:#fff;line-height:1.08;margin-bottom:10px}
+.masthead-title em{color:#D4A017;font-style:italic}
+.masthead-desc{font-size:14.5px;color:rgba(255,255,255,0.62);font-weight:300;max-width:800px;margin-bottom:16px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:4px 11px;border-radius:20px;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.72)}
+.pill.amber{border-color:#B8870A;color:#D4A017}
+
+/* TABS */
+.tabs-bar{position:sticky;top:0;z-index:50;background:#1B2635;display:flex;border-bottom:2px solid #B8870A;margin:26px 0 0}
+.tabbtn{flex:1;font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.05em;padding:14px 18px 12px;color:rgba(255,255,255,.45);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;text-align:center}
+.tabbtn:hover{color:rgba(255,255,255,.8)}
+.tabbtn.active{color:#D4A017;border-bottom-color:#D4A017}
+.tabbtn .tb-sub{display:block;font-size:9px;color:rgba(255,255,255,.34);margin-top:4px;letter-spacing:.03em}
+.tabbtn.active .tb-sub{color:rgba(212,160,23,.62)}
+.tabpane{display:none}
+.tabpane.active{display:block}
+
+/* PART BANNER */
+.part-banner{background:#1B2635;color:#fff;padding:16px 22px;margin:34px 0 6px;display:flex;align-items:baseline;gap:14px;border-left:4px solid #B8870A}
+.part-banner .pn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:#D4A017}
+.part-banner .pt{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700}
+.part-banner .px{font-size:12px;color:rgba(255,255,255,.5);margin-left:auto;font-family:'JetBrains Mono',monospace}
+
+/* SECTION */
+.section{padding:30px 0 6px}
+.s-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;color:#B8870A;text-transform:uppercase;margin-bottom:5px}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;line-height:1.15;margin-bottom:7px}
+.s-title em{font-style:italic;color:#9a7208}
+.s-divider{width:44px;height:2px;background:#B8870A;margin-bottom:16px}
+.lead{font-size:14px;color:#42505f;max-width:880px;margin-bottom:16px}
+p.body{font-size:13.5px;color:#33414f;margin-bottom:12px;max-width:900px}
+p.body strong{color:#1B2635;font-weight:700}
+
+/* TABLE */
+.tbl-wrap{background:#fff;border:1px solid #e2ddd6;overflow:hidden;margin:14px 0 8px}
+.tbl-cap{padding:8px 16px;border-bottom:1px solid #e2ddd6;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#777}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#1B2635}
+thead th{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.62);padding:8px 12px;text-align:left;font-weight:400;white-space:nowrap}
+th.r,td.r{text-align:right}
+th.c,td.c{text-align:center}
+tbody tr{border-bottom:1px solid #f0ede8}
+tbody tr:hover{background:#faf9f6}
+tbody tr:last-child{border-bottom:none}
+td{padding:7px 12px;vertical-align:top}
+td.r{font-family:'JetBrains Mono',monospace;font-size:12.5px}
+tbody tr.hl{background:#fbf6e9}
+tbody tr.hl:hover{background:#f7f0dd}
+tbody tr.tot{background:#1B2635;color:#fff;font-weight:600}
+tbody tr.tot td{color:#fff;font-family:'JetBrains Mono',monospace}
+.tkr{font-family:'JetBrains Mono',monospace;font-weight:600;color:#1B2635}
+.pos{color:#16a34a;font-weight:600}
+.neg{color:#dc2626;font-weight:600}
+.flat{color:#888;font-weight:600}
+tr.win td:first-child{box-shadow:inset 3px 0 0 #16a34a}
+tr.loss td:first-child{box-shadow:inset 3px 0 0 #dc2626}
+.note{font-size:11px;color:#999;font-family:'JetBrains Mono',monospace;margin:4px 0 14px}
+.trend{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+
+/* CALLOUT */
+.callout{background:#fff;border:1px solid #e2ddd6;border-left:3px solid #B8870A;padding:15px 18px;margin:14px 0;font-size:13.5px;color:#33414f}
+.callout strong{color:#1B2635}
+.callout.warn{border-left-color:#dc2626;background:#fdf3f2}
+.callout.warn .ct{color:#991b1b}
+.callout.key{border-left-color:#16a34a;background:#f1f8f3}
+.callout.key .ct{color:#166534}
+.ct{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#B8870A;margin-bottom:6px;font-weight:600}
+
+/* TWO COL */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.duo-card{background:#fff;border:1px solid #e2ddd6;padding:16px 18px}
+.duo-card.good{border-top:3px solid #16a34a}
+.duo-card.bad{border-top:3px solid #dc2626}
+.duo-card h4{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.duo-card.good h4{color:#166534}
+.duo-card.bad h4{color:#991b1b}
+.duo-card ul{list-style:none}
+.duo-card li{font-size:12.8px;color:#33414f;padding:6px 0 6px 16px;position:relative;border-bottom:1px dashed #ece8e1;line-height:1.5}
+.duo-card li:last-child{border-bottom:none}
+.duo-card li::before{position:absolute;left:0;top:6px;font-family:'JetBrains Mono',monospace;font-size:11px}
+.duo-card.good li::before{content:'+';color:#16a34a;font-weight:700}
+.duo-card.bad li::before{content:'\2212';color:#dc2626;font-weight:700}
+
+/* TIMELINE */
+.tl{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:14px 0;background:#fff;border:1px solid #e2ddd6}
+.tl-step{padding:14px 16px;border-right:1px solid #e2ddd6}
+.tl-step:last-child{border-right:none}
+.tl-q{font-family:'JetBrains Mono',monospace;font-size:10px;color:#B8870A;letter-spacing:.08em;margin-bottom:6px}
+.tl-act{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;margin-bottom:4px}
+.tl-meta{font-size:11.5px;color:#667;font-family:'JetBrains Mono',monospace;line-height:1.7}
+.tl-step.peak{background:#1B2635}
+.tl-step.peak .tl-q{color:#D4A017}
+.tl-step.peak .tl-act{color:#fff}
+.tl-step.peak .tl-meta{color:rgba(255,255,255,.7)}
+
+/* STAT STRIP */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border:1px solid #e2ddd6;margin:14px 0}
+.stat{padding:13px 18px;border-right:1px solid #e2ddd6}
+.stat:last-child{border-right:none}
+.stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:5px}
+.stat-v{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:700;line-height:1}
+.stat-s{font-size:10.5px;color:#aaa;margin-top:4px;font-family:'JetBrains Mono',monospace}
+
+/* THESIS (intent reconstruction) */
+.thesis{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.trow{background:#fff;border:1px solid #e2ddd6;border-left:3px solid #1B2635;padding:13px 17px}
+.trow-q{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:#1B2635;font-weight:600;margin-bottom:6px}
+.trow-q span{color:#B8870A}
+.trow-act{font-size:12.8px;color:#42505f;margin-bottom:8px}
+.trow-act b{color:#1B2635}
+.trow-why{font-size:13px;color:#33414f;background:#faf8f3;border:1px dashed #d8cfb8;padding:9px 12px}
+.infer{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;background:#B8870A;color:#fff;padding:2px 6px;border-radius:2px;margin-right:7px;vertical-align:1px}
+
+/* FOOTER */
+.footer{background:#1B2635;padding:20px 0;margin-top:40px}
+.footer .wrap{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.4);letter-spacing:.05em;flex-wrap:wrap;gap:8px}
+
+@media(max-width:760px){
+  .masthead-title{font-size:34px}
+  .duo,.tl,.stats{grid-template-columns:1fr}
+  .tl-step,.stat{border-right:none;border-bottom:1px solid #e2ddd6}
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">13F Behavioral Research · WhaleWisdom / SEC Filings · Q1 2025 – Q1 2026</div>
+    <h1 class="masthead-title">他们在<em>建仓什么</em>，又在<em>想什么</em></h1>
+    <p class="masthead-desc">用 5 个季度的 13F 申报，对 Coatue Management 与 Situational Awareness LP 做决策级复盘——价值链映射、量化行为指标、逐仓全覆盖记分卡、季度意图还原四个维度，提炼可验证的投资 skill，并标出 13F 数据本身的盲区。</p>
+    <div class="pills">
+      <span class="pill amber">Value-Chain Mapping</span>
+      <span class="pill">Behavioral Metrics</span>
+      <span class="pill">Full Scorecard</span>
+      <span class="pill">Intent Reconstruction</span>
+      <span class="pill">2 Funds · 5 Quarters</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- 方法论 -->
+<div class="section">
+  <div class="s-label">前置 · 读这份报告之前</div>
+  <div class="s-title">方法论与数据边界</div>
+  <div class="s-divider"></div>
+  <p class="lead">13F 是一份有结构性盲区的数据。把它当成"完整组合"去读，提炼出来的 skill 会是错的。两家机构能分析的深度并不一样——先把这点说清楚。</p>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">数据可信度对照</div>
+    <table>
+      <thead><tr><th>维度</th><th>Coatue Management</th><th>Situational Awareness LP</th></tr></thead>
+      <tbody>
+        <tr><td>13F 构成</td><td>几乎纯股票多头，无期权</td><td><span class="neg">期权名义金额主导</span> + 私募债 PRN</td></tr>
+        <tr><td>价格数据</td><td>5 季完整，含估算成本价 / 季末价</td><td>仅 Q3·Q4 2025 含价格；更早季度来自截图</td></tr>
+        <tr><td>能做到</td><td><span class="pos">价值链 + 量化指标 + 逐仓记分卡</span></td><td>底层股票腿可分析；整体 P&amp;L 不可知</td></tr>
+        <tr><td>意图还原</td><td>可三角验证（仍为推断）</td><td>可三角验证（仍为推断）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <div class="ct">四条必须记住的盲区</div>
+    ① 13F 不申报<strong>空头、现金、债券、海外上市、商品与宏观衍生工具</strong>；② 申报有 <strong>45 天滞后</strong>，季内买卖完全不可见；③ <strong>"% 权重变化 ≠ 加减仓"</strong>——股价涨跌会改变权重，必须看 Δ Shares；④ 估算成本价对<strong>窗口内新建仓可信、对持有多年的旧仓不可信</strong>（含拆股噪音）。本报告所有"意图/想什么"均为<strong>推断</strong>，已显式标注。
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tabbtn active" onclick="showTab('coatue',this)">Coatue Management<span class="tb-sub">纯股票 13F · 完整记分卡</span></button>
+  <button class="tabbtn" onclick="showTab('sa',this)">Situational Awareness LP<span class="tb-sub">期权名义主导 · 部分可分析</span></button>
+</div>
+
+<!-- ============ PART 1 COATUE ============ -->
+<div class="tabpane active" id="tab-coatue">
+
+<div class="part-banner">
+  <span class="pn">PART 01</span>
+  <span class="pt">Coatue Management</span>
+  <span class="px">AUM $22.7B → $29.1B · 峰值 $40.8B</span>
+</div>
+
+<!-- 1.1 骨架 -->
+<div class="section">
+  <div class="s-label">1.1 · 组合骨架</div>
+  <div class="s-title">8 个核心，撑起六成仓位</div>
+  <div class="s-divider"></div>
+  <div class="tbl-wrap">
+    <div class="tbl-cap">季度结构演变</div>
+    <table>
+      <thead><tr><th>季度</th><th class="r">AUM</th><th class="r">持仓数</th><th class="r">Top 5</th><th class="r">Top 10</th><th>这一季的关键词</th></tr></thead>
+      <tbody>
+        <tr><td class="tkr">Q1 2025</td><td class="r">$22.7B</td><td class="r">70</td><td class="r">35%</td><td class="r">57%</td><td>超大规模云为核</td></tr>
+        <tr><td class="tkr">Q2 2025</td><td class="r">$35.9B</td><td class="r">70</td><td class="r">33%</td><td class="r">57%</td><td>CRWV 跃居第一</td></tr>
+        <tr><td class="tkr">Q3 2025</td><td class="r">$40.8B</td><td class="r">74</td><td class="r">29%</td><td class="r">51%</td><td>低换手，兑现 CRWV</td></tr>
+        <tr><td class="tkr">Q4 2025</td><td class="r">$40.0B</td><td class="r">52</td><td class="r">30%</td><td class="r">54%</td><td>高换手，重心转产能层</td></tr>
+        <tr class="hl"><td class="tkr">Q1 2026</td><td class="r">$29.1B</td><td class="r">62</td><td class="r">38%</td><td class="r">64%</td><td>全账户降仓 −27%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body">结构稳定：常年约 8 个 mega-cap 核心占组合六成，外加一条几十只小仓的长尾。<strong>组合的 P&amp;L 由核心决定，长尾是试验田</strong>——后面 1.3 的量化指标会证明这一点。</p>
+</div>
+
+<!-- 1.2 价值链映射 -->
+<div class="section">
+  <div class="s-label">1.2 · 价值链映射 · 本报告核心发现</div>
+  <div class="s-title">整个组合是<em>一个 AI 基础设施的产业链下注</em></div>
+  <div class="s-divider"></div>
+  <p class="lead">把 62 个持仓重新归类到 AI 基建产业链的 6 个层级——从"需求端"到"产能端"。结论：这不是 62 个独立选股，是同一个 thesis 在产业链不同位置的表达，而且 5 个季度里在<strong>系统性地往产业链下游（产能端）迁移</strong>。</p>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">AI 产业链敞口演变（占 AUM %）· 需求端 → 产能端</div>
+    <table>
+      <thead><tr><th>产业链层级</th><th class="r">Q1'25</th><th class="r">Q2'25</th><th class="r">Q3'25</th><th class="r">Q4'25</th><th class="r">Q1'26</th><th class="c">5 季趋势</th></tr></thead>
+      <tbody>
+        <tr><td>需求端 · 超大规模云 + AI 应用</td><td class="r">36.3%</td><td class="r">32.6%</td><td class="r">39.0%</td><td class="r">40.3%</td><td class="r">27.3%</td><td class="c"><span class="trend neg">↓ 减</span></td></tr>
+        <tr><td>算力服务 · Neocloud（CRWV）</td><td class="r">2.4%</td><td class="r">8.1%</td><td class="r">2.3%</td><td class="r">0%</td><td class="r">0%</td><td class="c"><span class="trend flat">round-trip</span></td></tr>
+        <tr><td>算力芯片（NVDA / AVGO / ARM…）</td><td class="r">8.2%</td><td class="r">12.2%</td><td class="r">10.9%</td><td class="r">10.8%</td><td class="r">10.5%</td><td class="c"><span class="trend flat">→ 持平</span></td></tr>
+        <tr class="hl"><td>半导体设备 WFE（LRCX / AMAT / ASML）</td><td class="r">2.6%</td><td class="r">2.9%</td><td class="r">5.0%</td><td class="r">8.1%</td><td class="r">15.8%</td><td class="c"><span class="trend pos">↑↑ 6 倍</span></td></tr>
+        <tr class="hl"><td>晶圆代工（TSM）</td><td class="r">5.8%</td><td class="r">5.1%</td><td class="r">5.5%</td><td class="r">6.6%</td><td class="r">10.8%</td><td class="c"><span class="trend pos">↑ 翻倍</span></td></tr>
+        <tr class="hl"><td>电力 + 数据中心实物（GEV / CEG / EQIX…）</td><td class="r">15.9%</td><td class="r">15.8%</td><td class="r">14.8%</td><td class="r">15.2%</td><td class="r">23.2%</td><td class="c"><span class="trend pos">↑ 加</span></td></tr>
+        <tr class="tot"><td>AI 产业链合计</td><td class="r">71.2%</td><td class="r">76.7%</td><td class="r">77.4%</td><td class="r">81.0%</td><td class="r">87.6%</td><td class="c">↑ 越来越纯</td></tr>
+        <tr><td>非产业链（AI 软件 + 非 AI）</td><td class="r">28.8%</td><td class="r">23.3%</td><td class="r">22.6%</td><td class="r">19.0%</td><td class="r">12.4%</td><td class="c"><span class="trend neg">↓ 砍</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout key">
+    <div class="ct">价值链结论</div>
+    两条线索：① <strong>组合在向 thesis 收敛</strong>——AI 产业链占比从 71% 升到 88%，非链资产从 29% 砍到 12%；② <strong>资金沿产业链从"需求端"向"产能端"迁移</strong>——半导体设备 2.6%→15.8%（6 倍）、代工 5.8%→10.8%（翻倍）、电力实物 15.9%→23.2%，而需求端超大规模云从 36% 降到 27%。到 Q1 2026，<strong>设备+代工+电力实物三层合计 49.8%——半个组合压在"AI 要建、就绕不开"的实物产能层。</strong>
+  </div>
+  <p class="body">这是比"它买了 NVDA、买了 TSM"深一层的读法：Coatue 不是在选股，是在<strong>沿 AI 资本开支的传导链往下游走</strong>——先持有受益于 AI 的需求端（hyperscaler），再逐步把钱搬到"无论哪家云赢、产能都得建"的设备 / 代工 / 电力。这是一个把"个股 beta"换成"产业链确定性"的主动迁移。</p>
+</div>
+
+<!-- 1.3 量化行为指标 -->
+<div class="section">
+  <div class="s-label">1.3 · 量化行为指标</div>
+  <div class="s-title">把"高换手""试探建仓"变成<em>数字</em></div>
+  <div class="s-divider"></div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">换手率 — 实质持仓（≥ $50M）的进出</div>
+    <table>
+      <thead><tr><th>季度</th><th class="r">实质持仓数</th><th class="r">新建</th><th class="r">退出</th><th class="r">换手率</th><th>读法</th></tr></thead>
+      <tbody>
+        <tr><td class="tkr">Q1 2025</td><td class="r">39</td><td class="r">—</td><td class="r">—</td><td class="r">基准</td><td>—</td></tr>
+        <tr><td class="tkr">Q2 2025</td><td class="r">46</td><td class="r pos">10</td><td class="r neg">3</td><td class="r">17%</td><td>扩张期</td></tr>
+        <tr><td class="tkr">Q3 2025</td><td class="r">51</td><td class="r pos">8</td><td class="r neg">3</td><td class="r">12%</td><td>最低换手，持有等兑现</td></tr>
+        <tr><td class="tkr">Q4 2025</td><td class="r">42</td><td class="r pos">9</td><td class="r neg">18</td><td class="r">26%</td><td>最高换手，大清洗</td></tr>
+        <tr><td class="tkr">Q1 2026</td><td class="r">39</td><td class="r pos">8</td><td class="r neg">11</td><td class="r">23%</td><td>降仓 + 重构</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body">换手率不均匀——<strong>12%（Q3）到 26%（Q4）来回摆</strong>。Coatue 不是匀速调仓，是"长期持有 + 阶段性大重构"交替：Q3 静止等兑现，Q4 一次砍 18 只。</p>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">新建仓存活率 — 它的"试探建仓"成功率有多低</div>
+    <table>
+      <thead><tr><th>建仓季</th><th class="r">实质新建</th><th class="r">Q1'26 仍持有</th><th class="r">长成核心(≥2%)</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="tkr">Q1 2025</td><td class="r">6</td><td class="r">2</td><td class="r neg">0</td><td>仅 CVNA、PINS 存活且都是小仓</td></tr>
+        <tr><td class="tkr">Q2 2025</td><td class="r">9</td><td class="r">3</td><td class="r neg">0</td><td>ORCL / ARM / CHA / BULL 全清仓</td></tr>
+        <tr><td class="tkr">Q3 2025</td><td class="r">5</td><td class="r">3</td><td class="r pos">1</td><td>仅 AMAT 长成 6.2% 核心</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <div class="ct">关键量化结论</div>
+    2025 全年约 <strong>20 笔实质新建仓，到 Q1 2026 只有 AMAT 一笔长成了核心持仓（≥2%）</strong>。CRWV 曾长成核心（8.1%）但已 round-trip 清出。换句话说：<strong>Coatue 的"试探—放大"机制成功率极低（约 1/20），但一旦成功（CRWV、AMAT）就是组合的主要贡献者。</strong>核心仓更多来自<strong>多年的存量持仓</strong>，不是新挖出来的。
+  </div>
+
+  <div class="duo">
+    <div class="duo-card" style="border-top:3px solid #1B2635">
+      <h4 style="color:#1B2635">仓位规模分布（持仓数）</h4>
+      <ul style="font-family:'JetBrains Mono',monospace;font-size:12px">
+        <li style="padding-left:0">≥5% 核心仓 &nbsp;:&nbsp; 7 / 8 / 4 / 7 / 8</li>
+        <li style="padding-left:0">2–5% 中坚仓 :&nbsp; 11 / 9 / 13 / 12 / 8</li>
+        <li style="padding-left:0">0.5–2% 卫星 :&nbsp; 14 / 18 / 20 / 13 / 15</li>
+        <li style="padding-left:0">&lt;0.5% 微仓 &nbsp;:&nbsp; 38 / 35 / 37 / 20 / 31</li>
+      </ul>
+      <p style="font-size:11.5px;color:#888;margin-top:8px">微仓常年 20–38 只，多为 &lt;$10M 的残股（AMC / HTZ / PTON 等）——计入"持仓数"会高估组合复杂度，实际只有约 20 只仓位是有意义的。</p>
+    </div>
+    <div class="duo-card" style="border-top:3px solid #1B2635">
+      <h4 style="color:#1B2635">板块敞口演变（占 AUM %）</h4>
+      <ul style="font-family:'JetBrains Mono',monospace;font-size:12px">
+        <li style="padding-left:0">Info Tech &nbsp;: 39.7 → <span class="pos">50.0</span></li>
+        <li style="padding-left:0">Communications : 23.7 → 17.2</li>
+        <li style="padding-left:0">Consumer Disc : 18.4 → <span class="neg">13.1</span></li>
+        <li style="padding-left:0">Industrials : 5.2 → 8.0（GEV）</li>
+        <li style="padding-left:0">Utilities : 5.5 → 4.5（CEG）</li>
+      </ul>
+      <p style="font-size:11.5px;color:#888;margin-top:8px">信息技术从四成升到一半。但 GICS 板块掩盖了真相——价值链映射（1.2）才看得出钱去了"设备 / 代工"。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 1.4 逐仓记分卡 -->
+<div class="section">
+  <div class="s-label">1.4 · 逐仓全覆盖记分卡</div>
+  <div class="s-title">现在谁在赚、<em>谁在水下</em></div>
+  <div class="s-divider"></div>
+  <p class="lead">Q1 2026 全部实质持仓（&gt;0.5%）的估算成本 vs 季末价。<strong>窗口内建仓的成本可信；持有多年的旧仓成本含拆股噪音，仅作背景。</strong></p>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">Q1 2026 持仓 MTM — 窗口内建仓（成本可信）</div>
+    <table>
+      <thead><tr><th>标的</th><th class="r">权重</th><th>建仓季</th><th class="r">成本est</th><th class="r">季末价</th><th class="r">浮盈亏</th></tr></thead>
+      <tbody>
+        <tr class="win"><td class="tkr">AMAT</td><td class="r">6.2%</td><td>Q3 2025</td><td class="r">$199</td><td class="r">$342</td><td class="r pos">+71%</td></tr>
+        <tr class="win"><td class="tkr">MTZ</td><td class="r">0.7%</td><td>Q4 2025</td><td class="r">$206</td><td class="r">$322</td><td class="r pos">+56%</td></tr>
+        <tr class="win"><td class="tkr">VRT</td><td class="r">0.9%</td><td>Q4 2025</td><td class="r">$171</td><td class="r">$251</td><td class="r pos">+46%</td></tr>
+        <tr class="win"><td class="tkr">GOOG</td><td class="r">1.1%</td><td>Q3 2025</td><td class="r">$202</td><td class="r">$287</td><td class="r pos">+42%</td></tr>
+        <tr class="win"><td class="tkr">CVNA</td><td class="r">0.7%</td><td>Q1 2025</td><td class="r">$51</td><td class="r">$63</td><td class="r pos">+23%</td></tr>
+        <tr class="win"><td class="tkr">EQIX</td><td class="r">3.7%</td><td>Q1 2026</td><td class="r">$852</td><td class="r">$980</td><td class="r pos">+15%</td></tr>
+        <tr class="win"><td class="tkr">ASML</td><td class="r">2.3%</td><td>Q1 2026</td><td class="r">$1,294</td><td class="r">$1,321</td><td class="r pos">+2%</td></tr>
+        <tr class="win"><td class="tkr">NTRA</td><td class="r">1.8%</td><td>Q3 2025</td><td class="r">$197</td><td class="r">$200</td><td class="r pos">+2%</td></tr>
+        <tr class="loss"><td class="tkr">V</td><td class="r">0.8%</td><td>Q1 2026</td><td class="r">$327</td><td class="r">$302</td><td class="r neg">−8%</td></tr>
+        <tr class="loss"><td class="tkr">QCOM</td><td class="r">0.6%</td><td>Q1 2026</td><td class="r">$154</td><td class="r">$129</td><td class="r neg">−16%</td></tr>
+        <tr class="loss"><td class="tkr">SNPS</td><td class="r">1.0%</td><td>Q3 2025</td><td class="r">$546</td><td class="r">$396</td><td class="r neg">−27%</td></tr>
+        <tr class="loss"><td class="tkr">CAI</td><td class="r">0.6%</td><td>Q2 2025</td><td class="r">$27</td><td class="r">$18</td><td class="r neg">−33%</td></tr>
+        <tr class="loss"><td class="tkr">CHYM</td><td class="r">0.7%</td><td>Q2 2025</td><td class="r">$35</td><td class="r">$19</td><td class="r neg">−46%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">旧仓（持有 1 年以上）：TSM / GEV / LRCX / AVGO / ETN / AMZN / META / CEG / GOOGL / NVDA / MSFT / NFLX / SPOT / APP / NU / ISRG / RDDT / FCNCA 共 18 只，估算 MTM 全部为正（牛市背景），但成本为累计估算含拆股噪音，不单独计分。</div>
+
+  <div class="callout warn">
+    <div class="ct">水下名单 — 全部是窗口内建仓</div>
+    Q1 2026 仍在水下的可信仓位：<strong>CHYM −46%、CAI −33%、SNPS −27%、QCOM −16%、V −8%</strong>。CHYM、CAI 都是 Q2 2025 建仓、深度亏损、<strong>至今仍持有</strong>——印证 Coatue 砍 loser 慢。SNPS 已从 2.2% 减到 1.0%，在慢撤。
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">窗口内 round-trip 记分卡 — 赢的</div>
+    <table>
+      <thead><tr><th>标的</th><th class="r">成本均价</th><th>退出</th><th class="r">估算回报</th><th class="r">峰值</th></tr></thead>
+      <tbody>
+        <tr class="win"><td class="tkr">CRWV</td><td class="r">$47</td><td>Q3–Q4 分批 $137→$72</td><td class="r pos">+130~150%</td><td class="r">+245%</td></tr>
+        <tr class="win"><td class="tkr">TEM</td><td class="r">$51</td><td>Q2 · $64</td><td class="r pos">+25%</td><td class="r">—</td></tr>
+        <tr class="win"><td class="tkr">JOYY</td><td class="r">$54</td><td>Q4 · $65</td><td class="r pos">+21%</td><td class="r">—</td></tr>
+        <tr class="win"><td class="tkr">PM</td><td class="r">$138</td><td>Q3 · $162</td><td class="r pos">+18%</td><td class="r">+32%</td></tr>
+        <tr class="win"><td class="tkr">MPWR</td><td class="r">$623</td><td>Q2 · $731</td><td class="r pos">+17%</td><td class="r">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-cap">窗口内 round-trip 记分卡 — 亏的</div>
+    <table>
+      <thead><tr><th>标的</th><th class="r">成本均价</th><th>退出</th><th class="r">估算回报</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr class="loss"><td class="tkr">CHA</td><td class="r">$31</td><td>Q1'26 · ~$10</td><td class="r neg">−65%</td><td>抱着一路跌</td></tr>
+        <tr class="loss"><td class="tkr">BULL</td><td class="r">$14</td><td>Q1'26 · ~$6</td><td class="r neg">−55%</td><td>清在底部附近</td></tr>
+        <tr class="loss"><td class="tkr">TTD</td><td class="r">$63</td><td>Q4 · $38</td><td class="r neg">−40%</td><td>清后又低位重进</td></tr>
+        <tr class="loss"><td class="tkr">AXON</td><td class="r">$650</td><td>Q1'26 · $425</td><td class="r neg">−35%</td><td>Q4 质量股篮子</td></tr>
+        <tr class="loss"><td class="tkr">SNOW</td><td class="r">$220</td><td>Q1'26 · $151</td><td class="r neg">−31%</td><td>慢减后清仓</td></tr>
+        <tr class="loss"><td class="tkr">FIG / RKT / INFY / KLAR / SWKS / SPGI</td><td class="r">—</td><td>各 1–2 季内清出</td><td class="r neg">−15~35%</td><td>长尾小仓</td></tr>
+        <tr class="loss"><td class="tkr">ORCL</td><td class="r">$175</td><td>Q1'26 · $147</td><td class="r flat">~持平</td><td>峰值曾 +61%，回吐殆尽</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">退出价取清仓季季末价，为近似值；实际成交在季内分布未知。成本均价为 WhaleWisdom 估算值。</div>
+  <div class="callout key">
+    <div class="ct">barbell 结构</div>
+    窗口内约 <strong>26 笔 round-trip，胜率仅约三分之一</strong>。但组合 P&amp;L 仍为正——因为一笔 CRWV（曾占 8% 仓位、+200%+）单独顶过十几笔亏损（绝大多数是 1% 以下小仓）。<strong>Coatue 的钱赚在被重仓的大 theme，不在长尾。</strong>
+  </div>
+</div>
+
+<!-- 1.5 CRWV -->
+<div class="section">
+  <div class="s-label">1.5 · 标志交易</div>
+  <div class="s-title">CRWV — 教科书级的<em>赢家管理</em></div>
+  <div class="s-divider"></div>
+  <div class="tl">
+    <div class="tl-step">
+      <div class="tl-q">Q1 2025 · 建仓</div>
+      <div class="tl-act">NEW</div>
+      <div class="tl-meta">1,440 万股<br>成本 $37<br>2.4% · $534M</div>
+    </div>
+    <div class="tl-step peak">
+      <div class="tl-q">Q2 2025 · 加仓追高</div>
+      <div class="tl-act">+24%</div>
+      <div class="tl-meta">成本→$47 · 股价 $163<br>MTM +245%<br><strong style="color:#D4A017">8.1% · $2.9B — 第一大持仓</strong></div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-q">Q3 2025 · 兑现</div>
+      <div class="tl-act" style="color:#16a34a">减 62%</div>
+      <div class="tl-meta">股价 $137（仍 +189%）<br>2.3% · $920M<br>接近高点开始落袋</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-q">Q4 2025 · 清仓</div>
+      <div class="tl-act" style="color:#dc2626">CLOSED</div>
+      <div class="tl-meta">股价已回落至 $72<br>残股清出<br>round-trip 完成</div>
+    </div>
+  </div>
+  <p class="body">上市当季就建仓 2.4%，涨起来还敢追加（成本从 $37 抬到 $47）。<strong>真正的 skill 在 Q3——在 $137（接近高点）先减 62% 落袋</strong>，没有抱着从 $163 坐到 $72。换成你的框架语言：它减的是<strong>仓位</strong>，不是<strong>信念</strong>——与"Bull Logic 下用产业信号出场"并不冲突，只是把浮盈兑现成现金。</p>
+</div>
+
+<!-- 1.6 核心仓 -->
+<div class="section">
+  <div class="s-label">1.6 · 核心仓的真功夫</div>
+  <div class="s-title">龙头大涨之前的<em>加仓择时</em></div>
+  <div class="s-divider"></div>
+  <div class="tbl-wrap">
+    <div class="tbl-cap">核心仓关键决策</div>
+    <table>
+      <thead><tr><th>标的</th><th>关键动作</th><th class="r">动作时股价</th><th class="r">此后走势</th><th>评级</th></tr></thead>
+      <tbody>
+        <tr class="win"><td class="tkr">LRCX</td><td>Q1 2025 直接翻倍加仓（+103%）</td><td class="r">$73</td><td class="r pos">→ $214（+193%）</td><td><span class="pos">优</span></td></tr>
+        <tr class="win"><td class="tkr">GOOGL</td><td>Q3 2025 三倍加仓（+259%）</td><td class="r">$243</td><td class="r pos">→ $313（Q4，+29%）</td><td><span class="pos">优</span></td></tr>
+        <tr class="win"><td class="tkr">AVGO</td><td>Q2 2025 加仓 +58%</td><td class="r">$275</td><td class="r pos">→ $346</td><td><span class="pos">优</span></td></tr>
+        <tr class="win"><td class="tkr">GEV</td><td>全程持有 ~5.5%，未减仓</td><td class="r">$305</td><td class="r pos">→ $873（近 3 倍）</td><td><span class="pos">优</span></td></tr>
+        <tr class="loss"><td class="tkr">APP</td><td>Q3 2025 在顶部加仓 +25%</td><td class="r">$718</td><td class="r neg">→ $398（−45%）</td><td><span class="neg">差</span></td></tr>
+        <tr class="loss"><td class="tkr">RDDT</td><td>Q2 2025 加仓 +31%</td><td class="r">$150</td><td class="r flat">→ $230 → 回 $134</td><td><span class="flat">圆弧回吐</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body">核心仓是 Coatue 真正赚钱的地方：<strong>LRCX 翻倍加仓抄在 3 倍行情起点、GOOGL 三倍加仓抄在大涨前夜</strong>，都是龙头加仓择时的范本。弱点在 APP——在 $718 顶部加仓后坐到 $398。</p>
+</div>
+
+<!-- 1.7 Q1 2026 修正 -->
+<div class="section">
+  <div class="s-label">1.7 · 一个必须修正的误读</div>
+  <div class="s-title">Q1 2026 不是"押注半导体设备"，是<em>全面降仓</em></div>
+  <div class="s-divider"></div>
+  <div class="tbl-wrap">
+    <div class="tbl-cap">Q1 2026 · 权重 vs 实际动作</div>
+    <table>
+      <thead><tr><th>标的</th><th class="r">Q1'26 权重</th><th class="r">实际 Δ Shares</th><th>真相</th></tr></thead>
+      <tbody>
+        <tr class="win"><td class="tkr">TSM</td><td class="r">10.8%</td><td class="r pos">+7.6%</td><td>唯一真加仓</td></tr>
+        <tr class="loss"><td class="tkr">AMAT</td><td class="r">6.2%</td><td class="r neg">−12%</td><td>权重升、实际在减</td></tr>
+        <tr class="loss"><td class="tkr">GEV</td><td class="r">7.7%</td><td class="r neg">−24%</td><td>权重升、实际在减</td></tr>
+        <tr class="loss"><td class="tkr">MSFT</td><td class="r">3.2%</td><td class="r neg">−52%</td><td>砍掉一半</td></tr>
+        <tr class="loss"><td class="tkr">GOOGL / NVDA / META / CEG</td><td class="r">—</td><td class="r neg">−22~37%</td><td>核心全线大幅减</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <div class="ct">误读修正</div>
+    AUM $40B→$29B（<strong>−27%</strong>）。LRCX/AMAT 权重上升是<strong>假象</strong>——是股价涨了 + 别的砍得更狠的被动结果。Q1 2026 是一次<strong>全账户降杠杆</strong>，不是主题切换。这正是"% 权重 ≠ 加减仓"盲区最典型的一次发作。
+  </div>
+</div>
+
+<!-- 1.8 意图还原 -->
+<div class="section">
+  <div class="s-label">1.8 · 意图 / 思路还原</div>
+  <div class="s-title">他们每个季度<em>在想什么</em></div>
+  <div class="s-divider"></div>
+  <p class="lead">把每季的建仓 / 加仓 / 清仓动作，对照当时的产业链位置与市场背景，推断其判断逻辑。<span class="infer">推断</span> 标记的内容是基于 13F 行为的假设，不是事实——13F 永远说不出"为什么"。</p>
+
+  <div class="thesis">
+    <div class="trow">
+      <div class="trow-q">Q1 2025 · <span>起点 — 持有需求端，但已埋下产能端伏笔</span></div>
+      <div class="trow-act"><b>动作：</b>组合以超大规模云（META 9.6% / AMZN 9.0%）+ 电力（CEG·ETN·GEV ~16%）为核；建仓 CRWV（CoreWeave 3 月 IPO）；<b>LRCX 直接翻倍加仓</b>；清掉一批软件（NOW·SHOP·DDOG·DELL）与中概。</div>
+      <div class="trow-why"><span class="infer">推断</span>相信 AI 是真的，但认为"AI 软件变现"拥挤、不确定，宁可持有基础设施。LRCX 翻倍是最早的伏笔——已经在赌"AI = 资本开支 = 设备需求"。</div>
+    </div>
+    <div class="trow">
+      <div class="trow-q">Q2 2025 · <span>押注 Neocloud 是稀缺算力的承载者</span></div>
+      <div class="trow-act"><b>动作：</b>CRWV 加仓 24% → 8.1% 成第一大；NVDA +34%、AVGO +58%；新建 ORCL 2.4%、ARM 2.1%；清掉全部中概（TCOM·BEKE·JD·QFIN…）。</div>
+      <div class="trow-why"><span class="infer">推断</span>这是 AI 算力交易最热的一季。重仓 CRWV + 新建 ORCL，是同一逻辑——押"谁能承载稀缺 AI 算力"（neocloud / OCI）。清中概是去噪音，把组合聚焦成纯美国 AI infra。CRWV 追高加仓 = 动量信念。</div>
+    </div>
+    <div class="trow">
+      <div class="trow-q">Q3 2025 · <span>兑现暴利，把钱往下游搬</span></div>
+      <div class="trow-act"><b>动作：</b>CRWV 减 62% 落袋；GOOGL <b>三倍加仓</b>于 $243；新建 AMAT、SNPS、SNOW；全季只清 5 只（最低换手）。</div>
+      <div class="trow-why"><span class="infer">推断</span>做了两件事：① 兑现 CRWV——neocloud 估值太满，先落袋；② 钱分两路——GOOGL（押 Google AI 重定价）+ AMAT（押 AI 资本开支会传导到晶圆设备）。低换手 = 组合进入"持有等兑现"。AMAT 建仓是产业链下移的正式开始。</div>
+    </div>
+    <div class="trow">
+      <div class="trow-q">Q4 2025 · <span>重心彻底转向产能层 + 一次失败的防御尝试</span></div>
+      <div class="trow-act"><b>动作：</b>TSM 升至第一；AMAT 加仓 79% → 3.9%；CRWV 全部清仓；一季清 18 只（最高换手）；新建一篮子"质量股"——SPGI·MCO·AXON·GNRC·EXPD。</div>
+      <div class="trow-why"><span class="infer">推断</span>两条线索：① AI 交易重心彻底落到"产能层"——TSM/AMAT 成核心，neocloud 故事走完即清仓；② 试着加一条"质量 / 防御"腿，可能是为 2026 波动做准备。但这条腿下一季就被自己否定。</div>
+    </div>
+    <div class="trow">
+      <div class="trow-q">Q1 2026 · <span>降险，但往"最确定的实物产能"收敛</span></div>
+      <div class="trow-act"><b>动作：</b>全账户 AUM −27%，几乎所有核心被减；TSM 是唯一真加仓；新建 ASML·EQIX·QCOM·MU；ORCL·SNOW·ARM·MRVL·AMD 清仓或大减；Q4 的质量股篮子（SPGI·MCO·AXON·RKT·INFY）几乎全清、且亏损了结。</div>
+      <div class="trow-why"><span class="infer">推断</span>一次明确的降险——但减仓中有结构。留下并加仓的是产业链最"实"的环节：TSM（代工）、ASML（光刻）、EQIX（数据中心地产）、LRCX/AMAT（设备）；砍掉的是 neocloud 二号（ORCL）、AI 软件（SNOW）、二线芯片（ARM/MRVL/AMD）。读法：<b>在降总仓位的同时，把组合质量往"AI 买不买都得建的实物产能"集中</b>——不是看空 AI，是 thesis 的防御性收敛。Q4 的防御腿被证伪后一季清掉，说明它对"靠选股做防御"没有耐心。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 1.9 skill -->
+<div class="section">
+  <div class="s-label">1.9 · skill 提炼</div>
+  <div class="s-title">Coatue 的能力圈与缺陷</div>
+  <div class="s-divider"></div>
+  <div class="duo">
+    <div class="duo-card good">
+      <h4>强项</h4>
+      <ul>
+        <li>产业链思维——不是选股，是沿 AI 资本开支传导链布局，并主动从需求端往产能端迁移</li>
+        <li>龙头大涨前加仓择时：LRCX 翻倍抄在 3 倍起点、GOOGL 三倍抄在大涨前夜</li>
+        <li>赢家上涨途中分批兑现——CRWV $137 减 62%，不抱到回吐</li>
+        <li>错了就认：Q4 的质量股篮子一季内证伪即清，不拖泥带水</li>
+      </ul>
+    </div>
+    <div class="duo-card bad">
+      <h4>弱项</h4>
+      <ul>
+        <li>"试探—放大"成功率极低：2025 约 20 笔新建仓只有 1 笔（AMAT）长成核心</li>
+        <li>对大 loser 砍得慢——CHYM 仍持 −46%、CAI 仍持 −33%</li>
+        <li>长尾小仓胜率仅约三分之一，且常年拖着 20–38 只微仓残股</li>
+        <li>残股常在后半段圆弧回吐：ORCL 峰值 +61% → 退出时已持平</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="ct">核心不对称</div>
+    <strong>Coatue 很会卖赢家、很会布产业链，但不太会快砍输家、也不太会从长尾里挖出新核心。</strong>它的 alpha 高度集中在"产业链择位 + 核心仓加仓择时 + 赢家兑现"这三件事上。
+  </div>
+</div>
+
+</div><!-- end #tab-coatue -->
+
+<!-- ============ PART 2 SITUATIONAL ============ -->
+<div class="tabpane" id="tab-sa">
+
+<div class="part-banner">
+  <span class="pn">PART 02</span>
+  <span class="pt">Situational Awareness LP</span>
+  <span class="px">名义 AUM $255M → $5.5B · 极致集中</span>
+</div>
+
+<!-- 2.1 阅读警告 -->
+<div class="section">
+  <div class="s-label">2.1 · 阅读警告</div>
+  <div class="s-title">它的 13F <em>不能</em>当普通组合读</div>
+  <div class="s-divider"></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-l">单一最大持仓</div><div class="stat-v">45.7%</div><div class="stat-s">INTC CALL · Q1'25</div></div>
+    <div class="stat"><div class="stat-l">第二例</div><div class="stat-v">26.9%</div><div class="stat-s">SMH PUT · Q2'25</div></div>
+    <div class="stat"><div class="stat-l">持仓数区间</div><div class="stat-v">9–28</div><div class="stat-s">极致集中</div></div>
+    <div class="stat"><div class="stat-l">CRWV 三条腿</div><div class="stat-v">3×</div><div class="stat-s">股票+CALL+PUT 并存</div></div>
+  </div>
+  <p class="body">三个理由让它的整体 P&amp;L <strong>不可知</strong>：① 期权名义金额主导——"市值"是标的股数 × 股价的名义值，不是权利金；② 同时持 CRWV 股票 + CALL + PUT 三条腿，是多空对冲并存的结构；③ 持 DEBT-CIPH / DEBT-LUME / DEBT-BLOO / DEBT-WEST 等 <strong>PRN 私募 / 可转债</strong>，无法从公开价格估值。能查证的，只有底层股票腿。</p>
+</div>
+
+<!-- 2.2 价值链 -->
+<div class="section">
+  <div class="s-label">2.2 · 价值链映射</div>
+  <div class="s-title">同一条 AI 产业链，<em>更靠下游、更纯</em></div>
+  <div class="s-divider"></div>
+  <p class="lead">Situational 押的是和 Coatue 同一条 AI 基建产业链，但站位完全不同——它<strong>从一开始就蹲在产业链最下游</strong>（矿工算力、电力、光互联），而且几乎 100% 押在 thesis 上、再叠期权杠杆。</p>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">Situational Q4 2025 持仓 · 按产业链层级（占名义组合 %）</div>
+    <table>
+      <thead><tr><th>产业链层级</th><th class="r">合计权重</th><th>主要持仓</th></tr></thead>
+      <tbody>
+        <tr><td>算力服务 · Neocloud</td><td class="r">~22%</td><td>CRWV CALL 14.0% + CRWV 股票 7.9%</td></tr>
+        <tr><td>矿工 → AI 算力 / HPC</td><td class="r">~24%</td><td>CORZ·IREN·APLD·CIFR·RIOT·HUT·BTDR·CLSK</td></tr>
+        <tr><td>电力 / 燃料电池</td><td class="r">~21%</td><td>BE 15.9% + EQT·SEI·EQT CALL·BE CALL</td></tr>
+        <tr><td>半导体 / 存储</td><td class="r">~20%</td><td>INTC CALL 13.5% + SNDK 4.5% + TSEM</td></tr>
+        <tr><td>光互联</td><td class="r">~10%</td><td>LITE 8.7% + COHR 1.6%</td></tr>
+        <tr class="tot"><td>AI 基建合计</td><td class="r">~97%</td><td>几乎 100% 押在一个 thesis 上</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout key">
+    <div class="ct">与 Coatue 的关键差异</div>
+    Coatue 用 5 个季度<strong>慢慢从需求端走到产能端</strong>；Situational <strong>从第一天就蹲在产业链最下游</strong>——矿工、电力、光模块这些"最便宜、最实物、弹性最大"的环节。它不做产业链轮动，它是这条链下游的<strong>纯 play + 杠杆放大</strong>。
+  </div>
+</div>
+
+<!-- 2.3 矿工篮子记分卡 -->
+<div class="section">
+  <div class="s-label">2.3 · 底层股票腿记分卡</div>
+  <div class="s-title">选股<em>极度精准</em>，但 Q4 已现裂缝</div>
+  <div class="s-divider"></div>
+  <p class="lead">底层股票腿的估算成本 vs 季末价（Q3、Q4 2025 实数）。Q3 是一次教科书级的早期主题捕捉；Q4 篮子内部开始分化。</p>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">Q3 2025 · 矿工 / AI-compute 篮子浮盈</div>
+    <table>
+      <thead><tr><th>标的</th><th class="r">估算成本</th><th class="r">Q3'25 季末</th><th class="r">浮盈</th><th>性质</th></tr></thead>
+      <tbody>
+        <tr class="win"><td class="tkr">IREN</td><td class="r">$10.58</td><td class="r">$46.93</td><td class="r pos">+343%</td><td>建仓极早、成本极低</td></tr>
+        <tr class="win"><td class="tkr">APLD</td><td class="r">$7.80</td><td class="r">$22.94</td><td class="r pos">+194%</td><td>建仓极早</td></tr>
+        <tr class="win"><td class="tkr">SNDK</td><td class="r">$54.78</td><td class="r">$112.20</td><td class="r pos">+105%</td><td>存储</td></tr>
+        <tr class="win"><td class="tkr">STX</td><td class="r">$161</td><td class="r">$236</td><td class="r pos">+46%</td><td>存储</td></tr>
+        <tr class="win"><td class="tkr">RIOT</td><td class="r">$12.91</td><td class="r">$19.03</td><td class="r pos">+47%</td><td>矿工</td></tr>
+        <tr class="win"><td class="tkr">VST</td><td class="r">$138</td><td class="r">$196</td><td class="r pos">+42%</td><td>电力</td></tr>
+        <tr class="win"><td class="tkr">TSEM</td><td class="r">$51</td><td class="r">$72</td><td class="r pos">+41%</td><td>半导体代工</td></tr>
+        <tr class="win"><td class="tkr">CORZ</td><td class="r">$13.02</td><td class="r">$17.94</td><td class="r pos">+38%</td><td>矿工转 HPC</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">Q4 2025 · 篮子内部分化 — 光 / 存储仍强，纯矿工 / 小盘转弱</div>
+    <table>
+      <thead><tr><th>仍然强</th><th class="r">Q4 浮盈</th><th>已转弱</th><th class="r">Q4 浮盈</th></tr></thead>
+      <tbody>
+        <tr><td class="tkr">TSEM</td><td class="r pos">+82%</td><td class="tkr">CRWV 股票腿</td><td class="r neg">−40%</td></tr>
+        <tr><td class="tkr">HUT</td><td class="r pos">+59%</td><td class="tkr">WYFI</td><td class="r neg">−34%</td></tr>
+        <tr><td class="tkr">LITE</td><td class="r pos">+59%</td><td class="tkr">CLSK</td><td class="r neg">−29%</td></tr>
+        <tr><td class="tkr">SNDK</td><td class="r pos">+49%</td><td class="tkr">PSIX</td><td class="r neg">−27%</td></tr>
+        <tr><td class="tkr">APLD</td><td class="r pos">+49%</td><td class="tkr">BTDR</td><td class="r neg">−24%</td></tr>
+        <tr><td class="tkr">COHR</td><td class="r pos">+48%</td><td class="tkr">RIOT</td><td class="r neg">−13%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">价格为底层股票腿估算成本 vs 季末价；期权腿（CALL/PUT）与 PRN 私募债不在此列，无法估值。</div>
+
+  <div class="callout key">
+    <div class="ct">可验证的 skill</div>
+    <strong>进得早、拿得便宜、敢重仓。</strong>IREN $10.58、APLD $7.80 的成本，意味着他们在矿工股被市场当"弃儿"时就建了仓。整条 miner-as-compute 篮子是一次教科书级的早期主题捕捉。
+  </div>
+</div>
+
+<!-- 2.4 对冲结构 -->
+<div class="section">
+  <div class="s-label">2.4 · 对冲结构量化</div>
+  <div class="s-title">看多主题，<em>对冲半导体 beta</em></div>
+  <div class="s-divider"></div>
+  <p class="lead">Situational 不是裸多头。它的期权腿是一套有演化的对冲体系——这是它和"纯做多 AI 篮子"基金最大的区别。</p>
+
+  <div class="tbl-wrap">
+    <div class="tbl-cap">对冲腿演变 — 4 个季度</div>
+    <table>
+      <thead><tr><th>季度</th><th>对冲结构</th><th>读法</th></tr></thead>
+      <tbody>
+        <tr><td class="tkr">Q1 2025</td><td>几乎无对冲；INTC CALL 占 45.7% 的极端方向性多头</td><td>纯进攻</td></tr>
+        <tr><td class="tkr">Q2 2025</td><td><span class="neg">SMH PUT 占 26.9%</span> — 巨额半导体指数空头</td><td>加多头同时买入板块崩盘险</td></tr>
+        <tr><td class="tkr">Q3 2025</td><td>SMH PUT 清掉，换成 NVDA/TSM/AVGO/MU PUT 一篮子个股空头</td><td>把粗对冲拆成精细的个股对冲</td></tr>
+        <tr class="hl"><td class="tkr">Q4 2025</td><td><span class="neg">PUT 对冲几乎全撤</span>，私募债 PRN 全平，转纯方向性多头（BE·LITE）</td><td>risk-on 转向</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <div class="ct">值得警惕的时点</div>
+    Situational 在 <strong>Q4 2025 撤掉了几乎所有 PUT 对冲、清掉私募债，转成纯方向性多头</strong>（BE 燃料电池 + LITE 光模块）。但恰恰是同一季，它的底层矿工 / 小盘股已经开始系统性回吐（2.3 节）。<strong>在篮子转弱的当口反而撤掉保险——这个时点选择是个风险标记。</strong>
+  </div>
+</div>
+
+<!-- 2.5 意图还原 -->
+<div class="section">
+  <div class="s-label">2.5 · 意图 / 思路还原</div>
+  <div class="s-title">他们每个季度<em>在想什么</em></div>
+  <div class="s-divider"></div>
+  <p class="lead"><span class="infer">推断</span> 标记的内容是基于 13F 行为的假设。Situational 的早期季度数据来自截图，置信度低于 Coatue。</p>
+  <div class="thesis">
+    <div class="trow">
+      <div class="trow-q">Q1 2025 · <span>一个极端集中的 Intel 拐点 bet</span></div>
+      <div class="trow-act"><b>动作：</b>INTC CALL 占 45.7%；同时用便宜的矿工股（CRWV·IREN·APLD）+ 电力（VST·CEG·EQT）搭起 AI-compute 篮子。</div>
+      <div class="trow-why"><span class="infer">推断</span>这是个 thesis 基金——把近一半仓位押在 Intel 拐点（围绕代工 / 政府介入 / 并购传闻）。同时用低成本矿工股低调建立 AI 算力篮子，等待 theme 发酵。</div>
+    </div>
+    <div class="trow">
+      <div class="trow-q">Q2 2025 · <span>看多个股、对冲板块</span></div>
+      <div class="trow-act"><b>动作：</b>新建 SMH PUT 占 26.9%；AVGO 加到 15.5%；矿工篮子继续加。</div>
+      <div class="trow-why"><span class="infer">推断</span>典型的"看多主题、对冲 beta"——相信 AI compute 个股能跑赢，但担心半导体板块整体回调，于是买入巨额指数 PUT 把系统性风险对冲掉，只留个股 alpha。</div>
+    </div>
+    <div class="trow">
+      <div class="trow-q">Q3 2025 · <span>精细化对冲 + 复杂结构化头寸</span></div>
+      <div class="trow-act"><b>动作：</b>SMH PUT 清掉，换 NVDA/TSM/AVGO/MU 个股 PUT；CRWV 同时持股票+CALL+PUT 三条腿；DEBT-PRN 私募债出现。</div>
+      <div class="trow-why"><span class="infer">推断</span>把对冲从一个指数 PUT 拆成多只龙头个股 PUT——更精准地剔除特定半导体风险。CRWV 三条腿说明在 CoreWeave 上做的是结构化 / 波动率 / 事件交易，不是简单做多。PRN 出现暗示有私募侧渠道。</div>
+    </div>
+    <div class="trow">
+      <div class="trow-q">Q4 2025 · <span>撤保险、压注 AI 电力与光互联</span></div>
+      <div class="trow-act"><b>动作：</b>新建 BE 15.9% 成第一大、LITE 8.7%；PUT 对冲几乎全撤；私募债全平。</div>
+      <div class="trow-why"><span class="infer">推断</span>一次 risk-on 转向——撤掉所有保险，把组合压在"AI 电力（燃料电池）+ 光互联"两个方向上。可能认为半导体回调风险已过。但底层矿工股此时已在回吐——这个判断的时点存疑。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.6 skill -->
+<div class="section">
+  <div class="s-label">2.6 · skill 提炼</div>
+  <div class="s-title">Situational Awareness 的能力圈与盲区</div>
+  <div class="s-divider"></div>
+  <div class="duo">
+    <div class="duo-card good">
+      <h4>能确认</h4>
+      <ul>
+        <li>早期、低成本拿下整条 AI-compute 下游篮子（矿工 / 电力 / 光互联）</li>
+        <li>主动对冲——用指数 / 个股 PUT 剔除板块 beta，只留个股 alpha</li>
+        <li>持 PRN 私募债 → 有 VC / 私募侧信息渠道，非纯公开市场玩家</li>
+        <li>极致集中、敢用期权杠杆放大 conviction</li>
+      </ul>
+    </div>
+    <div class="duo-card bad">
+      <h4>不可知 / 风险</h4>
+      <ul>
+        <li>期权腿与 PUT 对冲的真实盈亏 — 整体 P&amp;L 是黑箱</li>
+        <li>净多空敞口、真实杠杆倍数无法估算</li>
+        <li>Q4 在篮子转弱时撤掉对冲，时点选择存疑</li>
+        <li>Q4'24–Q2'25 数据来自截图，置信度受限</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #tab-sa -->
+
+<!-- ============ SYNTHESIS ============ -->
+<div class="part-banner">
+  <span class="pn">SYNTHESIS</span>
+  <span class="pt">对比 & 可操作结论</span>
+  <span class="px">两 tab 共用 · 常显</span>
+</div>
+
+<div class="section">
+  <div class="s-divider" style="margin-top:8px"></div>
+  <div class="tbl-wrap">
+    <div class="tbl-cap">两家横向对比</div>
+    <table>
+      <thead><tr><th>维度</th><th>Coatue</th><th>Situational Awareness LP</th></tr></thead>
+      <tbody>
+        <tr><td>产业链站位</td><td>需求端起步，5 季迁移到产能端</td><td>一开始就蹲在最下游（矿工 / 电力 / 光）</td></tr>
+        <tr><td>thesis 纯度</td><td>AI 链 71% → 88%</td><td>~97%，纯 play</td></tr>
+        <tr><td>表达方式</td><td>纯股票，靠仓位</td><td>股票 + 期权杠杆 + PUT 对冲 + 私募债</td></tr>
+        <tr><td>13F 代表性</td><td><span class="pos">高</span>（多头腿即全部）</td><td><span class="neg">低</span>（期权名义主导）</td></tr>
+        <tr><td>核心 skill</td><td>产业链择位 + 龙头加仓择时 + 赢家兑现</td><td>早期低成本拿主题 + 主动对冲 + 私募信息</td></tr>
+        <tr><td>主要弱点</td><td>砍 loser 慢、长尾胜率低、挖不出新核心</td><td>整体 P&amp;L 黑箱、Q4 在转弱时撤保险</td></tr>
+        <tr><td>能不能"抄"</td><td>核心仓 + 产业链方向可参考</td><td><span class="neg">不可——抄多头腿等于裸奔</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout key">
+    <div class="ct">结论一 · Coatue 真正值得学的是"产业链择位 + 赢家管理"</div>
+    不是抄它买了什么，是它的两个机制：① <strong>沿 AI 资本开支传导链主动迁移</strong>——从需求端走到"谁赢都得建"的产能端，把个股 beta 换成产业链确定性；② <strong>赢家上涨途中分批兑现</strong>（CRWV $137 减 62%）。两者都能搬进你的框架，且与"Bull Logic 用产业信号出场"不冲突——它减的是仓位敞口，不是产业信念。
+  </div>
+  <div class="callout warn">
+    <div class="ct">结论二 · Situational 给的是反向警示</div>
+    它的 13F 看起来很漂亮（矿工篮子 +300%），但你只看得到多头腿。<strong>真照抄会漏掉它曾经 27% 的 SMH PUT 对冲</strong>——同样一份漂亮的多头快照，背后可能是完全不同的风险结构。这正是 hedge fund 13F 不能直接 clone 的原因。
+  </div>
+  <div class="callout">
+    <div class="ct">结论三 · 一个共同的产业拐点信号</div>
+    两家都重仓 AI 基建下游，且 Situational 的底层篮子在 <strong>Q4 2025 已出现系统性回吐</strong>（CRWV 股票腿 −40%、纯矿工 / 小盘普遍转负）。光 / 存储 / 代工仍强、纯矿工 / 小盘转弱的<strong>分化</strong>，是这条 theme 景气度的早期裂缝——值得作为独立的产业信号持续跟踪。
+  </div>
+  <p class="body" style="margin-top:18px"><strong>一句话总结</strong>：13F 能告诉你"他们做了什么"和"大致赚没赚"，"为什么"永远是推断。Coatue 的复盘能落到产业链与逐笔成本，是因为它的 13F 干净；Situational 只能分析底层 theme 腿。两家最有价值的产出不是抄作业——是看清<strong>产业链该怎么择位、赢家该怎么管、以及 13F 本身的边界在哪里</strong>。</p>
+</div>
+
+</div><!-- .wrap -->
+
+<script>
+function showTab(id, btn){
+  document.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  document.querySelector('.tabs-bar').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+
+<div class="footer">
+  <div class="wrap">
+    <span>13F 决策深度分析 · COATUE & SITUATIONAL AWARENESS LP</span>
+    <span>Data: WhaleWisdom / SEC 13F · 成本价为估算值 · "意图"为推断 · Generated 2026-05-17</span>
+  </div>
+</div>
+
+</body>
+</html>

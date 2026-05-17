@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baillie Gifford &mdash; 13F Holdings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#F4F2ED;color:#1B2635;font-family:'Karla',sans-serif;font-size:14px;line-height:1.45}
+.masthead{background:#1B2635;border-bottom:3px solid #B8870A;padding:28px 0 24px;position:relative;overflow:hidden}
+.masthead::after{content:'BAILLIE GIFFORD';position:absolute;right:-20px;bottom:-30px;font-family:'Cormorant Garamond',serif;font-size:130px;font-weight:700;color:rgba(255,255,255,0.04);white-space:nowrap;pointer-events:none;letter-spacing:-2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#B8870A;text-transform:uppercase;margin-bottom:8px}
+.masthead-title{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:700;color:#fff;line-height:1.05;margin-bottom:8px}
+.masthead-title em{color:#D4A017;font-style:italic}
+.masthead-desc{font-size:14px;color:rgba(255,255,255,0.6);font-weight:300;max-width:820px;margin-bottom:12px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7)}
+.pill.amber{border-color:#B8870A;color:#D4A017}
+.stats-bar{background:#fff;border-bottom:1px solid #e2ddd6}
+.stats-bar .wrap{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid #e2ddd6}
+.stat{padding:11px 20px;border-right:1px solid #e2ddd6}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#999;margin-bottom:4px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#1B2635;line-height:1}
+.stat-sub{font-size:11px;color:#aaa;margin-top:3px}
+.section-hd{padding:24px 0 12px}
+.s-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.15em;color:#B8870A;text-transform:uppercase;margin-bottom:4px}
+.s-ttl{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;margin-bottom:6px}
+.s-div{width:44px;height:2px;background:#B8870A;margin-bottom:14px}
+.aum-chart{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:flex-end;padding:18px 20px 14px;background:#fff;border:1px solid #e2ddd6;min-height:180px}
+.aum-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+.aum-bar{width:100%;border-radius:2px 2px 0 0;min-height:4px}
+.aum-bar.solid{background:#1B2635}
+.aum-num{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;color:#1B2635}
+.aum-q{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#999}
+.chart-note{font-family:'JetBrains Mono',monospace;font-size:10px;color:#aaa;margin-top:8px}
+.qtabs{position:sticky;top:0;z-index:100;background:#1B2635;border-bottom:2px solid #B8870A}
+.qtabs .wrap{display:flex;overflow-x:auto;scrollbar-width:none}
+.qbtn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;padding:14px 20px;color:rgba(255,255,255,0.45);background:none;border:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s}
+.qbtn:hover{color:rgba(255,255,255,0.75)}
+.qbtn.active{color:#D4A017;border-bottom-color:#D4A017}
+.qtag{display:inline-block;margin-left:6px;font-size:9px;padding:1px 5px;border-radius:2px;background:rgba(184,135,10,0.2);color:#D4A017}
+.qsec{display:none}
+.qsec.active{display:block}
+.qmeta{background:#fff;border:1px solid #e2ddd6;padding:12px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.qm-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#999;margin-bottom:2px}
+.qm-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:500;color:#1B2635;line-height:1.1}
+.qm-sub{font-size:11px;color:#aaa;margin-top:2px}
+.tbl-wrap{background:#fff;border:1px solid #e2ddd6;overflow:hidden;margin-bottom:12px}
+.tbl-hd{padding:8px 16px;border-bottom:1px solid #e2ddd6;display:flex;align-items:center;justify-content:space-between}
+.tbl-hd-txt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#777}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#1B2635}
+thead th{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.6);padding:7px 12px;text-align:left;font-weight:400;white-space:nowrap}
+th.r,td.r{text-align:right}
+tbody tr{border-bottom:1px solid #f0ede8;transition:background .1s}
+tbody tr:hover{background:#faf9f6}
+td{padding:6px 12px;vertical-align:middle}
+td.r{font-family:'JetBrains Mono',monospace;font-size:12.5px}
+.tkr{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;color:#1B2635}
+.sbadge{font-size:10px;padding:2px 7px;border-radius:2px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;white-space:nowrap}
+.s-it{background:#dbeafe;color:#1d4ed8}
+.s-en{background:#fef3c7;color:#92400e}
+.s-fi{background:#dcfce7;color:#166534}
+.s-ut{background:#f3e8ff;color:#7e22ce}
+.s-cd{background:#fee2e2;color:#991b1b}
+.s-in{background:#e0f2fe;color:#0369a1}
+.s-hc{background:#fce7f3;color:#9d174d}
+.s-re{background:#d1fae5;color:#065f46}
+.s-cm{background:#ccfbf1;color:#0f766e}
+.s-cs{background:#ecfccb;color:#4d7c0f}
+.s-ma{background:#e7e5e4;color:#57534e}
+.s-tr{background:#e0e7ff;color:#4338ca}
+.pbar-row{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.pbar{height:4px;background:#1B2635;border-radius:2px;min-width:2px;flex-shrink:0}
+.pval{font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap}
+.stbadge{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.04em;text-transform:uppercase}
+.st-new{background:rgba(184,135,10,.12);color:#92400e}
+.st-add{background:rgba(22,163,74,.1);color:#166534}
+.st-red{background:rgba(234,88,12,.1);color:#c2410c}
+.st-nc{background:rgba(100,116,139,.1);color:#475569}
+.st-out{background:rgba(100,116,139,.13);color:#475569}
+tbody tr.dropped{opacity:.62}
+.drop-note{padding:7px 16px;font-size:10.5px;color:#92400e;background:rgba(184,135,10,.06);border-bottom:1px solid #e2ddd6;font-family:'JetBrains Mono',monospace;line-height:1.5}
+.ch-new{color:#B8870A;font-weight:600}
+.ch-add{color:#16a34a}
+.ch-neg{color:#dc2626}
+.ch-nc{color:#888}
+.sfilter-bar{display:flex;gap:5px;flex-shrink:0}
+.sfbtn{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 9px;border-radius:2px;border:1px solid #d4cfc8;background:transparent;color:#aaa;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
+.sfbtn:hover{border-color:#B8870A;color:#B8870A}
+.sfbtn.active{background:#1B2635;color:#fff;border-color:#1B2635}
+.narr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.narr-card{background:#fff;border:1px solid #e2ddd6;border-left:3px solid #B8870A;padding:14px 16px}
+.narr-ttl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#B8870A;margin-bottom:6px}
+.narr-card p{font-size:13px;line-height:1.55;color:#333}
+.narr-card p+p{margin-top:5px}
+.footer{background:#1B2635;padding:16px 0;margin-top:32px;border-top:1px solid rgba(255,255,255,.08)}
+.footer .wrap{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.35);letter-spacing:.06em}
+@media(max-width:768px){
+  .stats-bar .wrap{grid-template-columns:repeat(2,1fr)}
+  .narr-grid{grid-template-columns:1fr}
+  .qmeta{grid-template-columns:repeat(2,1fr)}
+  .masthead-title{font-size:36px}
+  .aum-chart{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Institutional Holdings &middot; WhaleWisdom &middot; SEC 13F Filings</div>
+    <h1 class="masthead-title">Baillie <em>Gifford</em></h1>
+    <p class="masthead-desc">苏格兰长线成长投资机构的 13F 美股账户。全球成长 / 颠覆式创新风格，重仓新兴市场电商与金融科技。5 季度持仓演变（Q1 2025 → Q1 2026），13F 推算 AUM $114.8B → $97.9B，峰值 $135.1B。本表为前 50 大持仓（覆盖申报约 80%）。</p>
+    <div class="pills">
+      <span class="pill amber">Long-Horizon Growth</span>
+      <span class="pill">Disruptive Innovation</span>
+      <span class="pill">Global / EM Growth</span>
+      <span class="pill">Top 50 Holdings</span>
+      <span class="pill">5 Quarters Tracked</span>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="wrap">
+    <div class="stat">
+      <div class="stat-lbl">最新 AUM（Q1 2026）</div>
+      <div class="stat-val">$97.89B</div>
+      <div class="stat-sub">vs Q4'25 -19%</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">季度 AUM 峰值</div>
+      <div class="stat-val">$135.07B</div>
+      <div class="stat-sub">Q3 2025</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">追踪季度数</div>
+      <div class="stat-val">5Q</div>
+      <div class="stat-sub">2025-03-31 → 2026-03-31</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">核心持仓</div>
+      <div class="stat-val" style="font-size:22px;padding-top:3px">NVDA</div>
+      <div class="stat-sub">7.26% · NVIDIA · 让赢家奔跑</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="section-hd">
+    <div class="s-lbl">资产规模演变</div>
+    <div class="s-ttl">AUM 轨迹</div>
+    <div class="s-div"></div>
+    <div class="aum-chart">
+      <div class="aum-col">
+        <div class="aum-num">$114.82B</div>
+        <div class="aum-bar solid" style="height:85px"></div>
+        <div class="aum-q">2025-03-31</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$134.15B</div>
+        <div class="aum-bar solid" style="height:99px"></div>
+        <div class="aum-q">2025-06-30</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$135.07B</div>
+        <div class="aum-bar solid" style="height:100px"></div>
+        <div class="aum-q">2025-09-30</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$120.31B</div>
+        <div class="aum-bar solid" style="height:89px"></div>
+        <div class="aum-q">2025-12-31</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$97.89B</div>
+        <div class="aum-bar solid" style="height:72px"></div>
+        <div class="aum-q">2026-03-31</div>
+      </div>
+    </div>
+    <div class="chart-note">AUM 由第一大持仓市值 / 占比反推；本表为前 50 大持仓，覆盖申报约 80%</div>
+  </div>
+</div>
+
+<div class="qtabs" id="qtabs">
+  <div class="wrap">
+    <button class="qbtn active" onclick="showQ('q1-2026',this)">2026-03-31 <span class="qtag">Q1</span></button>
+    <button class="qbtn" onclick="showQ('q4-2025',this)">2025-12-31 <span class="qtag">Q4</span></button>
+    <button class="qbtn" onclick="showQ('q3-2025',this)">2025-09-30 <span class="qtag">Q3</span></button>
+    <button class="qbtn" onclick="showQ('q2-2025',this)">2025-06-30 <span class="qtag">Q2</span></button>
+    <button class="qbtn" onclick="showQ('q1-2025',this)">2025-03-31 <span class="qtag">Q1'25</span></button>
+  </div>
+</div>
+
+<div class="wrap" style="padding-top:16px;padding-bottom:36px">
+
+<div class="qsec" id="q1-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-03-31</div><div class="qm-sub">Q1 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$114.82B</div><div class="qm-sub">首份追踪季度</div></div>
+    <div><div class="qm-lbl">Top 50 覆盖</div><div class="qm-val">82%</div><div class="qm-sub">前 50 大持仓 / 全申报</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">MELI</div><div class="qm-sub">6.43% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Top 50 Holdings &mdash; 2025-03-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">MELI</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,784,477</td><td class="r">$7.38B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">6.43%</span></div></td><td class="r">5.61%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−511,949</td></tr>
+        <tr><td><span class="tkr">AMZN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">34,831,430</td><td class="r">$6.63B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:48px"></div><span class="pval">5.77%</span></div></td><td class="r">6.08%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,220,727</td></tr>
+        <tr><td><span class="tkr">SPOT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">10,838,982</td><td class="r">$5.96B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:44px"></div><span class="pval">5.19%</span></div></td><td class="r">4.52%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,318,712</td></tr>
+        <tr><td><span class="tkr">SHOP</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">55,877,748</td><td class="r">$5.34B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:39px"></div><span class="pval">4.65%</span></div></td><td class="r">4.88%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,898,764</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">39,525,842</td><td class="r">$5.16B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:38px"></div><span class="pval">4.49%</span></div></td><td class="r">3.34%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,428,707</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">46,893,508</td><td class="r">$5.08B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:37px"></div><span class="pval">4.43%</span></div></td><td class="r">5.46%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−5,999,328</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">40,047,278</td><td class="r">$4.74B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:35px"></div><span class="pval">4.13%</span></div></td><td class="r">2.84%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,987,935</td></tr>
+        <tr><td><span class="tkr">NFLX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">40,346,330</td><td class="r">$3.76B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:28px"></div><span class="pval">3.28%</span></div></td><td class="r">3.07%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−4,411,090</td></tr>
+        <tr><td><span class="tkr">CPNG</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">155,258,559</td><td class="r">$3.4B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">2.97%</span></div></td><td class="r">2.72%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−5,777,873</td></tr>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">5,872,957</td><td class="r">$3.38B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">2.95%</span></div></td><td class="r">2.65%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−9,428</td></tr>
+        <tr><td><span class="tkr">NET</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">27,425,821</td><td class="r">$3.09B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:23px"></div><span class="pval">2.69%</span></div></td><td class="r">2.64%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−4,458,339</td></tr>
+        <tr><td><span class="tkr">NU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">265,160,474</td><td class="r">$2.72B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:20px"></div><span class="pval">2.37%</span></div></td><td class="r">1.79%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+40,181,132</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">7,021,856</td><td class="r">$2.64B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:19px"></div><span class="pval">2.30%</span></div></td><td class="r">2.39%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−349,939</td></tr>
+        <tr><td><span class="tkr">DASH</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">11,950,266</td><td class="r">$2.18B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:16px"></div><span class="pval">1.90%</span></div></td><td class="r">1.70%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,251,093</td></tr>
+        <tr><td><span class="tkr">RACE</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">4,623,463</td><td class="r">$1.96B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:14px"></div><span class="pval">1.71%</span></div></td><td class="r">1.81%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−900,451</td></tr>
+        <tr><td><span class="tkr">TEAM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">8,694,755</td><td class="r">$1.85B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:14px"></div><span class="pval">1.61%</span></div></td><td class="r">1.52%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+573,696</td></tr>
+        <tr><td><span class="tkr">TTD</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">31,413,946</td><td class="r">$1.72B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:13px"></div><span class="pval">1.50%</span></div></td><td class="r">3.18%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,764,987</td></tr>
+        <tr><td><span class="tkr">RBLX</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">27,478,545</td><td class="r">$1.6B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">1.40%</span></div></td><td class="r">1.25%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−553,179</td></tr>
+        <tr><td><span class="tkr">ISRG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">3,174,667</td><td class="r">$1.57B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">1.37%</span></div></td><td class="r">1.52%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−608,415</td></tr>
+        <tr><td><span class="tkr">APP</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">5,270,355</td><td class="r">$1.4B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.22%</span></div></td><td class="r">1.02%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,185,859</td></tr>
+        <tr><td><span class="tkr">IOT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">35,277,488</td><td class="r">$1.35B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.18%</span></div></td><td class="r">1.11%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,348,101</td></tr>
+        <tr><td><span class="tkr">WDAY</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">5,623,652</td><td class="r">$1.31B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.14%</span></div></td><td class="r">1.26%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−709,485</td></tr>
+        <tr><td><span class="tkr">DDOG</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">12,274,655</td><td class="r">$1.22B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.06%</span></div></td><td class="r">1.20%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,369,522</td></tr>
+        <tr><td><span class="tkr">ELV</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,303,038</td><td class="r">$1B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.87%</span></div></td><td class="r">0.71%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−184,346</td></tr>
+        <tr><td><span class="tkr">ONC</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">3,630,710</td><td class="r">$988M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.86%</span></div></td><td class="r">0.52%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−40,485</td></tr>
+        <tr><td><span class="tkr">ALNY</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">3,657,607</td><td class="r">$988M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.86%</span></div></td><td class="r">0.73%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−382,652</td></tr>
+        <tr><td><span class="tkr">DXCM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">14,179,830</td><td class="r">$968M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.84%</span></div></td><td class="r">0.87%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−432,962</td></tr>
+        <tr><td><span class="tkr">MA</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">1,631,605</td><td class="r">$894M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.78%</span></div></td><td class="r">0.73%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−166,333</td></tr>
+        <tr><td><span class="tkr">SCI</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">10,235,684</td><td class="r">$821M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.72%</span></div></td><td class="r">0.68%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−785,557</td></tr>
+        <tr><td><span class="tkr">RYAAY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">19,048,110</td><td class="r">$807M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.70%</span></div></td><td class="r">0.73%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,703,972</td></tr>
+        <tr><td><span class="tkr">DUOL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,477,752</td><td class="r">$769M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.67%</span></div></td><td class="r">0.68%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−262,350</td></tr>
+        <tr><td><span class="tkr">BNTX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">8,159,682</td><td class="r">$743M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.65%</span></div></td><td class="r">0.72%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−60,899</td></tr>
+        <tr><td><span class="tkr">PBR</span></td><td><span class="sbadge s-en">Energy</span></td><td class="r">51,748,747</td><td class="r">$742M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.65%</span></div></td><td class="r">0.55%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,677,171</td></tr>
+        <tr><td><span class="tkr">MRNA</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">24,948,558</td><td class="r">$707M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.62%</span></div></td><td class="r">1.24%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−13,941,013</td></tr>
+        <tr><td><span class="tkr">ESTC</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">7,843,557</td><td class="r">$699M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.61%</span></div></td><td class="r">0.68%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,030,346</td></tr>
+        <tr><td><span class="tkr">ENPH</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">11,052,357</td><td class="r">$686M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.60%</span></div></td><td class="r">0.44%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,680,567</td></tr>
+        <tr><td><span class="tkr">XYZ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">12,553,165</td><td class="r">$682M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.59%</span></div></td><td class="r">0.73%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,385,359</td></tr>
+        <tr><td><span class="tkr">CSGP</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">8,436,199</td><td class="r">$668M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.58%</span></div></td><td class="r">0.44%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+524,601</td></tr>
+        <tr><td><span class="tkr">RIVN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">48,542,887</td><td class="r">$604M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.53%</span></div></td><td class="r">0.51%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,060,559</td></tr>
+        <tr><td><span class="tkr">MLM</span></td><td><span class="sbadge s-ma">Materials</span></td><td class="r">1,255,116</td><td class="r">$600M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.52%</span></div></td><td class="r">0.76%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−656,204</td></tr>
+        <tr><td><span class="tkr">PODD</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,250,755</td><td class="r">$591M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.51%</span></div></td><td class="r">0.47%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−104,928</td></tr>
+        <tr><td><span class="tkr">AZO</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">151,612</td><td class="r">$578M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.50%</span></div></td><td class="r">0.40%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−11,477</td></tr>
+        <tr><td><span class="tkr">AUR</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">78,635,013</td><td class="r">$529M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.46%</span></div></td><td class="r">0.39%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,369,615</td></tr>
+        <tr><td><span class="tkr">WIX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,227,099</td><td class="r">$527M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.46%</span></div></td><td class="r">0.93%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,386,190</td></tr>
+        <tr><td><span class="tkr">WSO</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">1,019,100</td><td class="r">$518M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.45%</span></div></td><td class="r">0.40%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−78,981</td></tr>
+        <tr><td><span class="tkr">MMYT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">5,155,202</td><td class="r">$505M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.44%</span></div></td><td class="r">0.32%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,471,660</td></tr>
+        <tr><td><span class="tkr">ELF</span></td><td><span class="sbadge s-cs">Consumer Staples</span></td><td class="r">7,939,144</td><td class="r">$498M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.43%</span></div></td><td class="r">0.77%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−70,290</td></tr>
+        <tr><td><span class="tkr">KSPI</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">5,260,033</td><td class="r">$488M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.43%</span></div></td><td class="r">0.33%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+768,529</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,105,472</td><td class="r">$485M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.42%</span></div></td><td class="r">0.49%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−212,412</td></tr>
+        <tr><td><span class="tkr">TSLA</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,762,022</td><td class="r">$457M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.40%</span></div></td><td class="r">2.30%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−5,660,651</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q2-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-06-30</div><div class="qm-sub">Q2 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$134.15B</div><div class="qm-sub">vs $114.82B Q1 (+17%)</div></div>
+    <div><div class="qm-lbl">Top 50 覆盖</div><div class="qm-val">83%</div><div class="qm-sub">前 50 大持仓 / 全申报</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">MELI</div><div class="qm-sub">6.83% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Top 50 Holdings &mdash; 2025-06-30</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">MELI</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,505,672</td><td class="r">$9.16B</td><td class="r">$7.38B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">6.83%</span></div></td><td class="r">6.43%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−278,805</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">49,063,121</td><td class="r">$7.75B</td><td class="r">$5.08B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:46px"></div><span class="pval">5.78%</span></div></td><td class="r">4.43%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,169,613</td></tr>
+        <tr><td><span class="tkr">SPOT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">9,628,910</td><td class="r">$7.39B</td><td class="r">$5.96B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:44px"></div><span class="pval">5.51%</span></div></td><td class="r">5.19%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,210,072</td></tr>
+        <tr><td><span class="tkr">AMZN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">33,294,360</td><td class="r">$7.3B</td><td class="r">$6.63B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:43px"></div><span class="pval">5.45%</span></div></td><td class="r">5.77%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,537,070</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">41,623,294</td><td class="r">$6.66B</td><td class="r">$5.16B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:39px"></div><span class="pval">4.96%</span></div></td><td class="r">4.49%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,097,452</td></tr>
+        <tr><td><span class="tkr">NFLX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">39,035,050</td><td class="r">$5.23B</td><td class="r">$3.76B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:31px"></div><span class="pval">3.90%</span></div></td><td class="r">3.28%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,311,280</td></tr>
+        <tr><td><span class="tkr">NET</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">25,525,131</td><td class="r">$5B</td><td class="r">$3.09B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:29px"></div><span class="pval">3.73%</span></div></td><td class="r">2.69%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,900,690</td></tr>
+        <tr><td><span class="tkr">CPNG</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">160,899,909</td><td class="r">$4.82B</td><td class="r">$3.4B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:28px"></div><span class="pval">3.59%</span></div></td><td class="r">2.97%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+5,641,350</td></tr>
+        <tr><td><span class="tkr">SHOP</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">37,748,072</td><td class="r">$4.35B</td><td class="r">$5.34B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:26px"></div><span class="pval">3.25%</span></div></td><td class="r">4.65%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−18,129,676</td></tr>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">5,453,213</td><td class="r">$4.02B</td><td class="r">$3.38B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:24px"></div><span class="pval">3.00%</span></div></td><td class="r">2.95%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−419,744</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">34,372,712</td><td class="r">$3.6B</td><td class="r">$4.74B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:21px"></div><span class="pval">2.68%</span></div></td><td class="r">4.13%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−5,674,566</td></tr>
+        <tr><td><span class="tkr">NU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">260,981,788</td><td class="r">$3.58B</td><td class="r">$2.72B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:21px"></div><span class="pval">2.67%</span></div></td><td class="r">2.37%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−4,178,686</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">6,029,276</td><td class="r">$3B</td><td class="r">$2.64B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:18px"></div><span class="pval">2.24%</span></div></td><td class="r">2.30%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−992,580</td></tr>
+        <tr><td><span class="tkr">RBLX</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">26,378,405</td><td class="r">$2.78B</td><td class="r">$1.6B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:16px"></div><span class="pval">2.07%</span></div></td><td class="r">1.40%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,100,140</td></tr>
+        <tr><td><span class="tkr">APP</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">6,400,229</td><td class="r">$2.24B</td><td class="r">$1.4B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:13px"></div><span class="pval">1.67%</span></div></td><td class="r">1.22%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,129,874</td></tr>
+        <tr><td><span class="tkr">DASH</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">8,988,826</td><td class="r">$2.22B</td><td class="r">$2.18B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:13px"></div><span class="pval">1.65%</span></div></td><td class="r">1.90%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,961,440</td></tr>
+        <tr><td><span class="tkr">TTD</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">30,702,638</td><td class="r">$2.21B</td><td class="r">$1.72B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:13px"></div><span class="pval">1.65%</span></div></td><td class="r">1.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−711,308</td></tr>
+        <tr><td><span class="tkr">RACE</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">4,256,100</td><td class="r">$2.08B</td><td class="r">$1.96B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">1.55%</span></div></td><td class="r">1.71%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−367,363</td></tr>
+        <tr><td><span class="tkr">IOT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">43,893,738</td><td class="r">$1.75B</td><td class="r">$1.35B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.30%</span></div></td><td class="r">1.18%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+8,616,250</td></tr>
+        <tr><td><span class="tkr">TEAM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">8,527,513</td><td class="r">$1.73B</td><td class="r">$1.85B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.29%</span></div></td><td class="r">1.61%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−167,242</td></tr>
+        <tr><td><span class="tkr">ISRG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">3,114,665</td><td class="r">$1.69B</td><td class="r">$1.57B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.26%</span></div></td><td class="r">1.37%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−60,002</td></tr>
+        <tr><td><span class="tkr">DDOG</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">11,957,462</td><td class="r">$1.61B</td><td class="r">$1.22B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.20%</span></div></td><td class="r">1.06%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−317,193</td></tr>
+        <tr><td><span class="tkr">DXCM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">16,705,195</td><td class="r">$1.46B</td><td class="r">$968M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.09%</span></div></td><td class="r">0.84%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,525,365</td></tr>
+        <tr><td><span class="tkr">ALNY</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">3,031,891</td><td class="r">$989M</td><td class="r">$988M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.74%</span></div></td><td class="r">0.86%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−625,716</td></tr>
+        <tr><td><span class="tkr">RDDT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">6,482,328</td><td class="r">$976M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.73%</span></div></td><td class="r">0.07%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+5,732,328</td></tr>
+        <tr><td><span class="tkr">ELF</span></td><td><span class="sbadge s-cs">Consumer Staples</span></td><td class="r">7,770,771</td><td class="r">$967M</td><td class="r">$498M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.72%</span></div></td><td class="r">0.43%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−168,373</td></tr>
+        <tr><td><span class="tkr">RYAAY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">15,820,053</td><td class="r">$912M</td><td class="r">$807M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.68%</span></div></td><td class="r">0.70%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,228,057</td></tr>
+        <tr><td><span class="tkr">DUOL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,198,891</td><td class="r">$902M</td><td class="r">$769M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.67%</span></div></td><td class="r">0.67%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−278,861</td></tr>
+        <tr><td><span class="tkr">MA</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">1,591,049</td><td class="r">$894M</td><td class="r">$894M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.67%</span></div></td><td class="r">0.78%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−40,556</td></tr>
+        <tr><td><span class="tkr">ELV</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,237,022</td><td class="r">$870M</td><td class="r">$1B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.65%</span></div></td><td class="r">0.87%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−66,016</td></tr>
+        <tr><td><span class="tkr">BNTX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">8,038,872</td><td class="r">$856M</td><td class="r">$743M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.64%</span></div></td><td class="r">0.65%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−120,810</td></tr>
+        <tr><td><span class="tkr">XYZ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">12,012,644</td><td class="r">$816M</td><td class="r">$682M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.61%</span></div></td><td class="r">0.59%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−540,521</td></tr>
+        <tr><td><span class="tkr">SCI</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">10,000,054</td><td class="r">$814M</td><td class="r">$821M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.61%</span></div></td><td class="r">0.72%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−235,630</td></tr>
+        <tr><td><span class="tkr">TEM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">12,094,029</td><td class="r">$768M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.57%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+12,094,029</td></tr>
+        <tr><td><span class="tkr">CSGP</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">8,540,369</td><td class="r">$687M</td><td class="r">$668M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.51%</span></div></td><td class="r">0.58%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+104,170</td></tr>
+        <tr><td><span class="tkr">MLM</span></td><td><span class="sbadge s-ma">Materials</span></td><td class="r">1,230,943</td><td class="r">$676M</td><td class="r">$600M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.50%</span></div></td><td class="r">0.52%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−24,173</td></tr>
+        <tr><td><span class="tkr">PODD</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,135,068</td><td class="r">$671M</td><td class="r">$591M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.50%</span></div></td><td class="r">0.51%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−115,687</td></tr>
+        <tr><td><span class="tkr">RIVN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">47,584,480</td><td class="r">$654M</td><td class="r">$604M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.49%</span></div></td><td class="r">0.53%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−958,407</td></tr>
+        <tr><td><span class="tkr">RPRX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">18,020,455</td><td class="r">$649M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.48%</span></div></td><td class="r">0.36%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+4,618,171</td></tr>
+        <tr><td><span class="tkr">SNOW</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,848,124</td><td class="r">$637M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.48%</span></div></td><td class="r">0.37%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−80,572</td></tr>
+        <tr><td><span class="tkr">MRNA</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">22,094,124</td><td class="r">$610M</td><td class="r">$707M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.45%</span></div></td><td class="r">0.62%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,854,434</td></tr>
+        <tr><td><span class="tkr">MMYT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">5,716,130</td><td class="r">$560M</td><td class="r">$505M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.42%</span></div></td><td class="r">0.44%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+560,928</td></tr>
+        <tr><td><span class="tkr">JOBY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">52,824,729</td><td class="r">$557M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.42%</span></div></td><td class="r">0.28%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,052,579</td></tr>
+        <tr><td><span class="tkr">AVAV</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">1,938,698</td><td class="r">$552M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.41%</span></div></td><td class="r">0.21%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−41,452</td></tr>
+        <tr><td><span class="tkr">AZO</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">148,109</td><td class="r">$550M</td><td class="r">$578M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.41%</span></div></td><td class="r">0.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,503</td></tr>
+        <tr><td><span class="tkr">TSLA</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,700,116</td><td class="r">$540M</td><td class="r">$457M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.40%</span></div></td><td class="r">0.40%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−61,906</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,969,828</td><td class="r">$527M</td><td class="r">$485M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.39%</span></div></td><td class="r">0.42%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−135,644</td></tr>
+        <tr><td><span class="tkr">SYM</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">13,440,113</td><td class="r">$522M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.39%</span></div></td><td class="r">0.24%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−266,352</td></tr>
+        <tr><td><span class="tkr">AFRM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">7,532,410</td><td class="r">$521M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.39%</span></div></td><td class="r">0.35%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,471,061</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,265,239</td><td class="r">$513M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.38%</span></div></td><td class="r">0.36%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−229,834</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">掉出 Top 50 &mdash; Q1 2025（9 只）</span></div>
+    <div class="drop-note">下列标的上季在前 50、本季跌出追踪范围 —— 可能被减持、也可能已清仓；top-50 数据无法区分。例：PBR、WIX 在后续季度又回到前 50，并未被清仓。</div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th class="r">上季 Market Value</th><th class="r">上季排名</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr class="dropped"><td><span class="tkr">WDAY</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1.14%</td><td class="r">$1.31B</td><td class="r">#22</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">ONC</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">0.86%</td><td class="r">$988M</td><td class="r">#25</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">PBR</span></td><td><span class="sbadge s-en">Energy</span></td><td class="r">0.65%</td><td class="r">$742M</td><td class="r">#33</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">ESTC</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.61%</td><td class="r">$699M</td><td class="r">#35</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">ENPH</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.60%</td><td class="r">$686M</td><td class="r">#36</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">AUR</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.46%</td><td class="r">$529M</td><td class="r">#43</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">WIX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">0.46%</td><td class="r">$527M</td><td class="r">#44</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">WSO</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">0.45%</td><td class="r">$518M</td><td class="r">#45</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">KSPI</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.43%</td><td class="r">$488M</td><td class="r">#48</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q3-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-09-30</div><div class="qm-sub">Q3 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$135.07B</div><div class="qm-sub">vs $134.15B Q2 (+1%)</div></div>
+    <div><div class="qm-lbl">Top 50 覆盖</div><div class="qm-val">82%</div><div class="qm-sub">前 50 大持仓 / 全申报</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">NVDA</div><div class="qm-sub">6.43% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Top 50 Holdings &mdash; 2025-09-30</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">46,549,296</td><td class="r">$8.69B</td><td class="r">$7.75B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">6.43%</span></div></td><td class="r">5.79%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,513,825</td></tr>
+        <tr><td><span class="tkr">MELI</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,317,443</td><td class="r">$7.75B</td><td class="r">$9.16B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:48px"></div><span class="pval">5.74%</span></div></td><td class="r">6.84%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−188,229</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">40,090,290</td><td class="r">$7.17B</td><td class="r">$6.66B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:45px"></div><span class="pval">5.31%</span></div></td><td class="r">4.97%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,533,004</td></tr>
+        <tr><td><span class="tkr">AMZN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">31,659,114</td><td class="r">$6.95B</td><td class="r">$7.3B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:43px"></div><span class="pval">5.15%</span></div></td><td class="r">5.46%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,635,246</td></tr>
+        <tr><td><span class="tkr">SPOT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">8,695,348</td><td class="r">$6.07B</td><td class="r">$7.39B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:38px"></div><span class="pval">4.50%</span></div></td><td class="r">5.52%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−933,562</td></tr>
+        <tr><td><span class="tkr">SHOP</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">35,443,787</td><td class="r">$5.27B</td><td class="r">$4.35B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:33px"></div><span class="pval">3.90%</span></div></td><td class="r">3.25%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,304,285</td></tr>
+        <tr><td><span class="tkr">CPNG</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">150,382,707</td><td class="r">$4.84B</td><td class="r">$4.82B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:30px"></div><span class="pval">3.59%</span></div></td><td class="r">3.60%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−10,517,202</td></tr>
+        <tr><td><span class="tkr">NET</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">21,848,740</td><td class="r">$4.69B</td><td class="r">$5B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:29px"></div><span class="pval">3.47%</span></div></td><td class="r">3.73%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,676,391</td></tr>
+        <tr><td><span class="tkr">APP</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">6,245,960</td><td class="r">$4.49B</td><td class="r">$2.24B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:28px"></div><span class="pval">3.32%</span></div></td><td class="r">1.67%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−154,269</td></tr>
+        <tr><td><span class="tkr">NFLX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">36,490,470</td><td class="r">$4.37B</td><td class="r">$5.23B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:27px"></div><span class="pval">3.24%</span></div></td><td class="r">3.90%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,544,580</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">31,799,003</td><td class="r">$4.2B</td><td class="r">$3.6B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:26px"></div><span class="pval">3.11%</span></div></td><td class="r">2.69%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,573,709</td></tr>
+        <tr><td><span class="tkr">NU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">251,459,587</td><td class="r">$4.03B</td><td class="r">$3.58B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">2.98%</span></div></td><td class="r">2.67%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−9,522,201</td></tr>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">5,290,228</td><td class="r">$3.89B</td><td class="r">$4.02B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:24px"></div><span class="pval">2.88%</span></div></td><td class="r">3.01%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−162,985</td></tr>
+        <tr><td><span class="tkr">RBLX</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">23,296,603</td><td class="r">$3.23B</td><td class="r">$2.78B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:20px"></div><span class="pval">2.39%</span></div></td><td class="r">2.07%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,081,802</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">5,860,839</td><td class="r">$3.04B</td><td class="r">$3B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:19px"></div><span class="pval">2.25%</span></div></td><td class="r">2.24%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−168,437</td></tr>
+        <tr><td><span class="tkr">DASH</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">8,268,768</td><td class="r">$2.25B</td><td class="r">$2.22B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:14px"></div><span class="pval">1.67%</span></div></td><td class="r">1.65%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−720,058</td></tr>
+        <tr><td><span class="tkr">RACE</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">3,941,830</td><td class="r">$1.91B</td><td class="r">$2.08B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">1.41%</span></div></td><td class="r">1.55%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−314,270</td></tr>
+        <tr><td><span class="tkr">DDOG</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">11,413,479</td><td class="r">$1.63B</td><td class="r">$1.61B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.20%</span></div></td><td class="r">1.20%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−543,983</td></tr>
+        <tr><td><span class="tkr">IOT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">41,451,960</td><td class="r">$1.54B</td><td class="r">$1.75B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.14%</span></div></td><td class="r">1.30%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,441,778</td></tr>
+        <tr><td><span class="tkr">TTD</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">29,115,119</td><td class="r">$1.43B</td><td class="r">$2.21B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.06%</span></div></td><td class="r">1.65%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,587,519</td></tr>
+        <tr><td><span class="tkr">RDDT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">6,107,185</td><td class="r">$1.4B</td><td class="r">$976M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.04%</span></div></td><td class="r">0.73%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−375,143</td></tr>
+        <tr><td><span class="tkr">TEAM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">8,115,526</td><td class="r">$1.3B</td><td class="r">$1.73B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">0.96%</span></div></td><td class="r">1.29%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−411,987</td></tr>
+        <tr><td><span class="tkr">ALNY</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,789,356</td><td class="r">$1.27B</td><td class="r">$989M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">0.94%</span></div></td><td class="r">0.74%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−242,535</td></tr>
+        <tr><td><span class="tkr">ISRG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,602,598</td><td class="r">$1.16B</td><td class="r">$1.69B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.86%</span></div></td><td class="r">1.26%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−512,067</td></tr>
+        <tr><td><span class="tkr">DXCM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">15,882,168</td><td class="r">$1.07B</td><td class="r">$1.46B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.79%</span></div></td><td class="r">1.09%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−823,027</td></tr>
+        <tr><td><span class="tkr">ELF</span></td><td><span class="sbadge s-cs">Consumer Staples</span></td><td class="r">7,349,678</td><td class="r">$974M</td><td class="r">$967M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.72%</span></div></td><td class="r">0.72%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−421,093</td></tr>
+        <tr><td><span class="tkr">DUOL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,827,834</td><td class="r">$910M</td><td class="r">$902M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.67%</span></div></td><td class="r">0.67%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+628,943</td></tr>
+        <tr><td><span class="tkr">MA</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">1,559,732</td><td class="r">$887M</td><td class="r">$894M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.66%</span></div></td><td class="r">0.67%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−31,317</td></tr>
+        <tr><td><span class="tkr">XYZ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">11,655,303</td><td class="r">$842M</td><td class="r">$816M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.62%</span></div></td><td class="r">0.61%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−357,341</td></tr>
+        <tr><td><span class="tkr">JOBY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">50,420,953</td><td class="r">$814M</td><td class="r">$557M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.60%</span></div></td><td class="r">0.42%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,403,776</td></tr>
+        <tr><td><span class="tkr">RYAAY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">13,485,567</td><td class="r">$812M</td><td class="r">$912M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.60%</span></div></td><td class="r">0.68%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,334,486</td></tr>
+        <tr><td><span class="tkr">SCI</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">9,689,267</td><td class="r">$806M</td><td class="r">$814M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.60%</span></div></td><td class="r">0.61%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−310,787</td></tr>
+        <tr><td><span class="tkr">TEM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">9,692,441</td><td class="r">$782M</td><td class="r">$768M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.58%</span></div></td><td class="r">0.57%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,401,588</td></tr>
+        <tr><td><span class="tkr">BNTX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">7,879,359</td><td class="r">$777M</td><td class="r">$856M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.58%</span></div></td><td class="r">0.64%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−159,513</td></tr>
+        <tr><td><span class="tkr">MLM</span></td><td><span class="sbadge s-ma">Materials</span></td><td class="r">1,195,794</td><td class="r">$754M</td><td class="r">$676M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.56%</span></div></td><td class="r">0.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−35,149</td></tr>
+        <tr><td><span class="tkr">TSLA</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,657,487</td><td class="r">$737M</td><td class="r">$540M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.55%</span></div></td><td class="r">0.40%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−42,629</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,906,948</td><td class="r">$708M</td><td class="r">$527M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.52%</span></div></td><td class="r">0.39%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−62,880</td></tr>
+        <tr><td><span class="tkr">ELV</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,166,914</td><td class="r">$700M</td><td class="r">$870M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.52%</span></div></td><td class="r">0.65%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−70,108</td></tr>
+        <tr><td><span class="tkr">CSGP</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">8,241,642</td><td class="r">$695M</td><td class="r">$687M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.52%</span></div></td><td class="r">0.51%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−298,727</td></tr>
+        <tr><td><span class="tkr">SYM</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">12,683,739</td><td class="r">$684M</td><td class="r">$522M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.51%</span></div></td><td class="r">0.39%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−756,374</td></tr>
+        <tr><td><span class="tkr">RIVN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">44,937,443</td><td class="r">$660M</td><td class="r">$654M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.49%</span></div></td><td class="r">0.49%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,647,037</td></tr>
+        <tr><td><span class="tkr">PODD</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,091,698</td><td class="r">$646M</td><td class="r">$671M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.48%</span></div></td><td class="r">0.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−43,370</td></tr>
+        <tr><td><span class="tkr">SNOW</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,795,556</td><td class="r">$631M</td><td class="r">$637M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.47%</span></div></td><td class="r">0.48%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−52,568</td></tr>
+        <tr><td><span class="tkr">AZO</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">143,931</td><td class="r">$617M</td><td class="r">$550M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.46%</span></div></td><td class="r">0.41%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−4,178</td></tr>
+        <tr><td><span class="tkr">RPRX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">17,372,502</td><td class="r">$613M</td><td class="r">$649M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.45%</span></div></td><td class="r">0.48%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−647,953</td></tr>
+        <tr><td><span class="tkr">RKLB</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">12,125,910</td><td class="r">$581M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.43%</span></div></td><td class="r">0.12%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+7,734,788</td></tr>
+        <tr><td><span class="tkr">MRNA</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">21,846,666</td><td class="r">$564M</td><td class="r">$610M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.42%</span></div></td><td class="r">0.46%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−247,458</td></tr>
+        <tr><td><span class="tkr">AVAV</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">1,783,679</td><td class="r">$562M</td><td class="r">$552M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.42%</span></div></td><td class="r">0.41%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−155,019</td></tr>
+        <tr><td><span class="tkr">WIX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,892,145</td><td class="r">$514M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.38%</span></div></td><td class="r">0.35%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−91,790</td></tr>
+        <tr><td><span class="tkr">ENSG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,818,609</td><td class="r">$487M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.36%</span></div></td><td class="r">0.17%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,382,035</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">掉出 Top 50 &mdash; Q2 2025（3 只）</span></div>
+    <div class="drop-note">下列标的上季在前 50、本季跌出追踪范围 —— 可能被减持、也可能已清仓；top-50 数据无法区分。例：PBR、WIX 在后续季度又回到前 50，并未被清仓。</div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th class="r">上季 Market Value</th><th class="r">上季排名</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr class="dropped"><td><span class="tkr">MMYT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">0.42%</td><td class="r">$560M</td><td class="r">#42</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">AFRM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.39%</td><td class="r">$521M</td><td class="r">#49</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.38%</td><td class="r">$513M</td><td class="r">#50</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q4-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-12-31</div><div class="qm-sub">Q4 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$120.31B</div><div class="qm-sub">vs $135.07B Q3 (-11%)</div></div>
+    <div><div class="qm-lbl">Top 50 覆盖</div><div class="qm-val">81%</div><div class="qm-sub">前 50 大持仓 / 全申报</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">NVDA</div><div class="qm-sub">6.80% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Top 50 Holdings &mdash; 2025-12-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">43,867,705</td><td class="r">$8.18B</td><td class="r">$8.69B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">6.80%</span></div></td><td class="r">6.43%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,681,591</td></tr>
+        <tr><td><span class="tkr">MELI</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,481,563</td><td class="r">$7.01B</td><td class="r">$7.75B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:46px"></div><span class="pval">5.83%</span></div></td><td class="r">5.74%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+164,120</td></tr>
+        <tr><td><span class="tkr">AMZN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">29,387,070</td><td class="r">$6.78B</td><td class="r">$6.95B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:45px"></div><span class="pval">5.64%</span></div></td><td class="r">5.15%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,272,044</td></tr>
+        <tr><td><span class="tkr">SHOP</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">31,206,232</td><td class="r">$5.02B</td><td class="r">$5.27B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:33px"></div><span class="pval">4.17%</span></div></td><td class="r">3.90%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−4,237,555</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">38,758,791</td><td class="r">$4.94B</td><td class="r">$7.17B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:33px"></div><span class="pval">4.11%</span></div></td><td class="r">5.31%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,331,499</td></tr>
+        <tr><td><span class="tkr">SPOT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">8,331,104</td><td class="r">$4.84B</td><td class="r">$6.07B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:32px"></div><span class="pval">4.02%</span></div></td><td class="r">4.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−364,244</td></tr>
+        <tr><td><span class="tkr">NU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">257,256,952</td><td class="r">$4.31B</td><td class="r">$4.03B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:28px"></div><span class="pval">3.58%</span></div></td><td class="r">2.98%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+5,797,365</td></tr>
+        <tr><td><span class="tkr">APP</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">6,166,349</td><td class="r">$4.16B</td><td class="r">$4.49B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:27px"></div><span class="pval">3.45%</span></div></td><td class="r">3.32%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−79,611</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">31,032,323</td><td class="r">$3.52B</td><td class="r">$4.2B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:23px"></div><span class="pval">2.92%</span></div></td><td class="r">3.11%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−766,680</td></tr>
+        <tr><td><span class="tkr">NFLX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">36,940,035</td><td class="r">$3.46B</td><td class="r">$4.37B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:23px"></div><span class="pval">2.88%</span></div></td><td class="r">3.24%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+449,565</td></tr>
+        <tr><td><span class="tkr">CPNG</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">146,122,094</td><td class="r">$3.45B</td><td class="r">$4.84B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:23px"></div><span class="pval">2.86%</span></div></td><td class="r">3.59%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−4,260,613</td></tr>
+        <tr><td><span class="tkr">NET</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">16,823,947</td><td class="r">$3.32B</td><td class="r">$4.69B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:22px"></div><span class="pval">2.76%</span></div></td><td class="r">3.47%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−5,024,793</td></tr>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">4,399,233</td><td class="r">$2.9B</td><td class="r">$3.89B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:19px"></div><span class="pval">2.41%</span></div></td><td class="r">2.88%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−890,995</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">5,544,839</td><td class="r">$2.68B</td><td class="r">$3.04B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:18px"></div><span class="pval">2.23%</span></div></td><td class="r">2.25%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−316,000</td></tr>
+        <tr><td><span class="tkr">DASH</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">7,970,062</td><td class="r">$1.81B</td><td class="r">$2.25B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">1.50%</span></div></td><td class="r">1.67%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−298,706</td></tr>
+        <tr><td><span class="tkr">RBLX</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">21,543,528</td><td class="r">$1.75B</td><td class="r">$3.23B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">1.45%</span></div></td><td class="r">2.39%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,753,075</td></tr>
+        <tr><td><span class="tkr">IOT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">47,660,513</td><td class="r">$1.69B</td><td class="r">$1.54B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:11px"></div><span class="pval">1.40%</span></div></td><td class="r">1.14%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+6,208,553</td></tr>
+        <tr><td><span class="tkr">RACE</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">3,890,014</td><td class="r">$1.46B</td><td class="r">$1.91B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.21%</span></div></td><td class="r">1.41%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−51,816</td></tr>
+        <tr><td><span class="tkr">ISRG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,551,357</td><td class="r">$1.44B</td><td class="r">$1.16B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.20%</span></div></td><td class="r">0.86%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−51,241</td></tr>
+        <tr><td><span class="tkr">RDDT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">5,980,918</td><td class="r">$1.37B</td><td class="r">$1.4B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.14%</span></div></td><td class="r">1.04%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−126,267</td></tr>
+        <tr><td><span class="tkr">TEAM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">8,431,802</td><td class="r">$1.37B</td><td class="r">$1.3B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.14%</span></div></td><td class="r">0.96%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+316,276</td></tr>
+        <tr><td><span class="tkr">RKLB</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">17,851,446</td><td class="r">$1.25B</td><td class="r">$581M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">1.03%</span></div></td><td class="r">0.43%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+5,725,536</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,750,936</td><td class="r">$1.18B</td><td class="r">$708M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">0.98%</span></div></td><td class="r">0.52%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+843,988</td></tr>
+        <tr><td><span class="tkr">ALNY</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,600,979</td><td class="r">$1.03B</td><td class="r">$1.27B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.86%</span></div></td><td class="r">0.94%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−188,377</td></tr>
+        <tr><td><span class="tkr">DXCM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">15,552,587</td><td class="r">$1.03B</td><td class="r">$1.07B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.86%</span></div></td><td class="r">0.79%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−329,581</td></tr>
+        <tr><td><span class="tkr">AXON</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">1,642,578</td><td class="r">$933M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.78%</span></div></td><td class="r">0.07%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,516,099</td></tr>
+        <tr><td><span class="tkr">CSGP</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">12,933,185</td><td class="r">$870M</td><td class="r">$695M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.72%</span></div></td><td class="r">0.52%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+4,691,543</td></tr>
+        <tr><td><span class="tkr">RIVN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">43,781,355</td><td class="r">$863M</td><td class="r">$660M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.72%</span></div></td><td class="r">0.49%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,156,088</td></tr>
+        <tr><td><span class="tkr">DUOL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">4,861,445</td><td class="r">$853M</td><td class="r">$910M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.71%</span></div></td><td class="r">0.67%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,033,611</td></tr>
+        <tr><td><span class="tkr">TTD</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">22,305,995</td><td class="r">$847M</td><td class="r">$1.43B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.70%</span></div></td><td class="r">1.06%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−6,809,124</td></tr>
+        <tr><td><span class="tkr">MA</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">1,464,206</td><td class="r">$836M</td><td class="r">$887M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.69%</span></div></td><td class="r">0.66%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−95,526</td></tr>
+        <tr><td><span class="tkr">RYAAY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">11,343,819</td><td class="r">$819M</td><td class="r">$812M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.68%</span></div></td><td class="r">0.60%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,141,748</td></tr>
+        <tr><td><span class="tkr">ENSG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">4,569,254</td><td class="r">$796M</td><td class="r">$487M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.66%</span></div></td><td class="r">0.36%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,750,645</td></tr>
+        <tr><td><span class="tkr">SYM</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">12,441,000</td><td class="r">$740M</td><td class="r">$684M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.62%</span></div></td><td class="r">0.51%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−242,739</td></tr>
+        <tr><td><span class="tkr">MLM</span></td><td><span class="sbadge s-ma">Materials</span></td><td class="r">1,159,375</td><td class="r">$722M</td><td class="r">$754M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.60%</span></div></td><td class="r">0.56%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−36,419</td></tr>
+        <tr><td><span class="tkr">SCI</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">9,161,409</td><td class="r">$714M</td><td class="r">$806M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.59%</span></div></td><td class="r">0.60%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−527,858</td></tr>
+        <tr><td><span class="tkr">ELV</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">1,977,899</td><td class="r">$693M</td><td class="r">$700M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.58%</span></div></td><td class="r">0.52%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−189,015</td></tr>
+        <tr><td><span class="tkr">RPRX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">17,008,768</td><td class="r">$657M</td><td class="r">$613M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.55%</span></div></td><td class="r">0.45%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−363,734</td></tr>
+        <tr><td><span class="tkr">JOBY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">49,570,755</td><td class="r">$654M</td><td class="r">$814M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.54%</span></div></td><td class="r">0.60%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−850,198</td></tr>
+        <tr><td><span class="tkr">XYZ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">9,875,845</td><td class="r">$643M</td><td class="r">$842M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.53%</span></div></td><td class="r">0.62%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,779,458</td></tr>
+        <tr><td><span class="tkr">MRNA</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">20,580,514</td><td class="r">$607M</td><td class="r">$564M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.50%</span></div></td><td class="r">0.42%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,266,152</td></tr>
+        <tr><td><span class="tkr">TSLA</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,342,801</td><td class="r">$604M</td><td class="r">$737M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.50%</span></div></td><td class="r">0.55%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−314,686</td></tr>
+        <tr><td><span class="tkr">SNOW</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,735,752</td><td class="r">$600M</td><td class="r">$631M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.50%</span></div></td><td class="r">0.47%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−59,804</td></tr>
+        <tr><td><span class="tkr">GOOGL</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,907,296</td><td class="r">$597M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.50%</span></div></td><td class="r">0.13%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,192,091</td></tr>
+        <tr><td><span class="tkr">PODD</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,048,369</td><td class="r">$582M</td><td class="r">$646M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.48%</span></div></td><td class="r">0.48%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−43,329</td></tr>
+        <tr><td><span class="tkr">ELF</span></td><td><span class="sbadge s-cs">Consumer Staples</span></td><td class="r">7,177,659</td><td class="r">$546M</td><td class="r">$974M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.45%</span></div></td><td class="r">0.72%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−172,019</td></tr>
+        <tr><td><span class="tkr">DDOG</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">3,961,509</td><td class="r">$539M</td><td class="r">$1.63B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.45%</span></div></td><td class="r">1.20%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−7,451,970</td></tr>
+        <tr><td><span class="tkr">TEM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">8,741,442</td><td class="r">$516M</td><td class="r">$782M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.43%</span></div></td><td class="r">0.58%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−950,999</td></tr>
+        <tr><td><span class="tkr">GH</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">4,890,026</td><td class="r">$499M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.42%</span></div></td><td class="r">0.24%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−237,666</td></tr>
+        <tr><td><span class="tkr">MSCI</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">846,844</td><td class="r">$486M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.40%</span></div></td><td class="r">0.29%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+155,290</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">掉出 Top 50 &mdash; Q3 2025（4 只）</span></div>
+    <div class="drop-note">下列标的上季在前 50、本季跌出追踪范围 —— 可能被减持、也可能已清仓；top-50 数据无法区分。例：PBR、WIX 在后续季度又回到前 50，并未被清仓。</div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th class="r">上季 Market Value</th><th class="r">上季排名</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr class="dropped"><td><span class="tkr">BNTX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">0.58%</td><td class="r">$777M</td><td class="r">#34</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">AZO</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">0.46%</td><td class="r">$617M</td><td class="r">#44</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">AVAV</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">0.42%</td><td class="r">$562M</td><td class="r">#48</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">WIX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">0.38%</td><td class="r">$514M</td><td class="r">#49</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec active" id="q1-2026">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2026-03-31</div><div class="qm-sub">Q1 2026</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$97.89B</div><div class="qm-sub">vs $120.31B Q4 (-19%)</div></div>
+    <div><div class="qm-lbl">Top 50 覆盖</div><div class="qm-val">80%</div><div class="qm-sub">前 50 大持仓 / 全申报</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">NVDA</div><div class="qm-sub">7.26% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Top 50 Holdings &mdash; 2026-03-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">40,748,665</td><td class="r">$7.11B</td><td class="r">$8.18B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">7.26%</span></div></td><td class="r">6.80%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−3,119,040</td></tr>
+        <tr><td><span class="tkr">AMZN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">28,092,199</td><td class="r">$5.85B</td><td class="r">$6.78B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:44px"></div><span class="pval">5.98%</span></div></td><td class="r">5.64%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,294,871</td></tr>
+        <tr><td><span class="tkr">MELI</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,233,259</td><td class="r">$5.59B</td><td class="r">$7.01B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:42px"></div><span class="pval">5.71%</span></div></td><td class="r">5.83%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−248,304</td></tr>
+        <tr><td><span class="tkr">SPOT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">8,218,203</td><td class="r">$3.99B</td><td class="r">$4.84B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:30px"></div><span class="pval">4.07%</span></div></td><td class="r">4.02%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−112,901</td></tr>
+        <tr><td><span class="tkr">NU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">246,564,454</td><td class="r">$3.54B</td><td class="r">$4.31B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:27px"></div><span class="pval">3.62%</span></div></td><td class="r">3.58%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−10,692,498</td></tr>
+        <tr><td><span class="tkr">SHOP</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">29,021,841</td><td class="r">$3.44B</td><td class="r">$5.02B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:26px"></div><span class="pval">3.52%</span></div></td><td class="r">4.17%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,184,391</td></tr>
+        <tr><td><span class="tkr">NET</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">15,924,423</td><td class="r">$3.29B</td><td class="r">$3.32B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">3.36%</span></div></td><td class="r">2.76%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−899,524</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">39,654,072</td><td class="r">$3.28B</td><td class="r">$4.94B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">3.35%</span></div></td><td class="r">4.11%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+895,281</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">28,353,099</td><td class="r">$2.9B</td><td class="r">$3.52B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:22px"></div><span class="pval">2.96%</span></div></td><td class="r">2.92%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,679,224</td></tr>
+        <tr><td><span class="tkr">APP</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">6,700,132</td><td class="r">$2.67B</td><td class="r">$4.16B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:20px"></div><span class="pval">2.72%</span></div></td><td class="r">3.45%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+533,783</td></tr>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">4,098,821</td><td class="r">$2.35B</td><td class="r">$2.9B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:18px"></div><span class="pval">2.40%</span></div></td><td class="r">2.41%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−300,412</td></tr>
+        <tr><td><span class="tkr">CPNG</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">120,656,242</td><td class="r">$2.28B</td><td class="r">$3.45B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:17px"></div><span class="pval">2.33%</span></div></td><td class="r">2.86%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−25,465,852</td></tr>
+        <tr><td><span class="tkr">NFLX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">21,805,669</td><td class="r">$2.1B</td><td class="r">$3.46B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:16px"></div><span class="pval">2.14%</span></div></td><td class="r">2.88%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−15,134,366</td></tr>
+        <tr><td><span class="tkr">IOT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">57,523,792</td><td class="r">$1.82B</td><td class="r">$1.69B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:14px"></div><span class="pval">1.86%</span></div></td><td class="r">1.40%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+9,863,279</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">3,878,029</td><td class="r">$1.44B</td><td class="r">$2.68B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:11px"></div><span class="pval">1.47%</span></div></td><td class="r">2.23%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,666,810</td></tr>
+        <tr><td><span class="tkr">RACE</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">3,875,660</td><td class="r">$1.29B</td><td class="r">$1.46B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">1.32%</span></div></td><td class="r">1.21%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−14,354</td></tr>
+        <tr><td><span class="tkr">RBLX</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">21,423,012</td><td class="r">$1.21B</td><td class="r">$1.75B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.24%</span></div></td><td class="r">1.45%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−120,516</td></tr>
+        <tr><td><span class="tkr">ISRG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,567,565</td><td class="r">$1.18B</td><td class="r">$1.44B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.21%</span></div></td><td class="r">1.20%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+16,208</td></tr>
+        <tr><td><span class="tkr">RKLB</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">18,428,043</td><td class="r">$1.18B</td><td class="r">$1.25B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">1.21%</span></div></td><td class="r">1.03%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+576,597</td></tr>
+        <tr><td><span class="tkr">DASH</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">7,241,815</td><td class="r">$1.09B</td><td class="r">$1.81B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">1.11%</span></div></td><td class="r">1.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−728,247</td></tr>
+        <tr><td><span class="tkr">AXON</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">2,459,727</td><td class="r">$1.04B</td><td class="r">$933M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">1.07%</span></div></td><td class="r">0.78%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+817,149</td></tr>
+        <tr><td><span class="tkr">MRNA</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">19,985,876</td><td class="r">$1.02B</td><td class="r">$607M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">1.04%</span></div></td><td class="r">0.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−594,638</td></tr>
+        <tr><td><span class="tkr">GOOG</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,499,244</td><td class="r">$1B</td><td class="r">$1.18B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">1.03%</span></div></td><td class="r">0.98%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−251,692</td></tr>
+        <tr><td><span class="tkr">RDDT</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">7,309,109</td><td class="r">$984M</td><td class="r">$1.37B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">1.01%</span></div></td><td class="r">1.14%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,328,191</td></tr>
+        <tr><td><span class="tkr">DXCM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">15,599,525</td><td class="r">$980M</td><td class="r">$1.03B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">1.00%</span></div></td><td class="r">0.86%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+46,938</td></tr>
+        <tr><td><span class="tkr">ENSG</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">4,826,172</td><td class="r">$972M</td><td class="r">$796M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.99%</span></div></td><td class="r">0.66%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+256,918</td></tr>
+        <tr><td><span class="tkr">BAP</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">2,729,498</td><td class="r">$926M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.95%</span></div></td><td class="r">0.34%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,296,605</td></tr>
+        <tr><td><span class="tkr">PBR</span></td><td><span class="sbadge s-en">Energy</span></td><td class="r">44,438,548</td><td class="r">$922M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">0.94%</span></div></td><td class="r">0.29%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+14,915,026</td></tr>
+        <tr><td><span class="tkr">ALNY</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,493,866</td><td class="r">$825M</td><td class="r">$1.03B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.84%</span></div></td><td class="r">0.86%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−107,113</td></tr>
+        <tr><td><span class="tkr">RPRX</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">16,155,677</td><td class="r">$775M</td><td class="r">$657M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">0.79%</span></div></td><td class="r">0.55%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−853,091</td></tr>
+        <tr><td><span class="tkr">SCI</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">8,605,439</td><td class="r">$710M</td><td class="r">$714M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.73%</span></div></td><td class="r">0.59%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−555,970</td></tr>
+        <tr><td><span class="tkr">MA</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">1,366,111</td><td class="r">$683M</td><td class="r">$836M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.70%</span></div></td><td class="r">0.69%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−98,095</td></tr>
+        <tr><td><span class="tkr">TEAM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">9,963,439</td><td class="r">$680M</td><td class="r">$1.37B</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.69%</span></div></td><td class="r">1.14%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,531,637</td></tr>
+        <tr><td><span class="tkr">SYM</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">12,479,888</td><td class="r">$664M</td><td class="r">$740M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.68%</span></div></td><td class="r">0.62%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+38,888</td></tr>
+        <tr><td><span class="tkr">RIVN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">43,821,500</td><td class="r">$660M</td><td class="r">$863M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.67%</span></div></td><td class="r">0.72%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+40,145</td></tr>
+        <tr><td><span class="tkr">MLM</span></td><td><span class="sbadge s-ma">Materials</span></td><td class="r">1,087,380</td><td class="r">$640M</td><td class="r">$722M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">0.65%</span></div></td><td class="r">0.60%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−71,995</td></tr>
+        <tr><td><span class="tkr">GOOGL</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,946,990</td><td class="r">$560M</td><td class="r">$597M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.57%</span></div></td><td class="r">0.50%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+39,694</td></tr>
+        <tr><td><span class="tkr">MMYT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">15,012,963</td><td class="r">$560M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.57%</span></div></td><td class="r">0.35%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+9,857,927</td></tr>
+        <tr><td><span class="tkr">CSGP</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">13,610,922</td><td class="r">$549M</td><td class="r">$870M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.56%</span></div></td><td class="r">0.72%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+677,737</td></tr>
+        <tr><td><span class="tkr">RYAAY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">9,225,175</td><td class="r">$533M</td><td class="r">$819M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.54%</span></div></td><td class="r">0.68%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−2,118,644</td></tr>
+        <tr><td><span class="tkr">JOBY</span></td><td><span class="sbadge s-tr">Transports</span></td><td class="r">62,419,803</td><td class="r">$516M</td><td class="r">$654M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.53%</span></div></td><td class="r">0.54%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+12,849,048</td></tr>
+        <tr><td><span class="tkr">TSLA</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,302,148</td><td class="r">$484M</td><td class="r">$604M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.49%</span></div></td><td class="r">0.50%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−40,653</td></tr>
+        <tr><td><span class="tkr">DUOL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">4,875,810</td><td class="r">$481M</td><td class="r">$853M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">0.49%</span></div></td><td class="r">0.71%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+14,365</td></tr>
+        <tr><td><span class="tkr">SQM</span></td><td><span class="sbadge s-ma">Materials</span></td><td class="r">5,707,211</td><td class="r">$462M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.47%</span></div></td><td class="r">0.36%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−526,506</td></tr>
+        <tr><td><span class="tkr">MSCI</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">852,357</td><td class="r">$459M</td><td class="r">$486M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.47%</span></div></td><td class="r">0.40%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+5,513</td></tr>
+        <tr><td><span class="tkr">MDLN</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">9,975,775</td><td class="r">$444M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.45%</span></div></td><td class="r">0.36%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−434,596</td></tr>
+        <tr><td><span class="tkr">ELF</span></td><td><span class="sbadge s-cs">Consumer Staples</span></td><td class="r">7,188,005</td><td class="r">$436M</td><td class="r">$546M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.45%</span></div></td><td class="r">0.45%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+10,346</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,282,250</td><td class="r">$433M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.44%</span></div></td><td class="r">0.34%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−54,241</td></tr>
+        <tr><td><span class="tkr">PODD</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">2,029,492</td><td class="r">$426M</td><td class="r">$582M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.43%</span></div></td><td class="r">0.48%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−18,877</td></tr>
+        <tr><td><span class="tkr">WSO</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">1,137,258</td><td class="r">$414M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.42%</span></div></td><td class="r">0.26%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+219,766</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">掉出 Top 50 &mdash; Q4 2025（7 只）</span></div>
+    <div class="drop-note">下列标的上季在前 50、本季跌出追踪范围 —— 可能被减持、也可能已清仓；top-50 数据无法区分。例：PBR、WIX 在后续季度又回到前 50，并未被清仓。</div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th class="r">上季 Market Value</th><th class="r">上季排名</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr class="dropped"><td><span class="tkr">TTD</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">0.70%</td><td class="r">$847M</td><td class="r">#30</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">ELV</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">0.58%</td><td class="r">$693M</td><td class="r">#37</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">XYZ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.53%</td><td class="r">$643M</td><td class="r">#40</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">SNOW</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.50%</td><td class="r">$600M</td><td class="r">#43</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">DDOG</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.45%</td><td class="r">$539M</td><td class="r">#47</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">TEM</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">0.43%</td><td class="r">$516M</td><td class="r">#48</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+        <tr class="dropped"><td><span class="tkr">GH</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">0.42%</td><td class="r">$499M</td><td class="r">#49</td><td><span class="stbadge st-out">OUT OF TOP 50</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section-hd">
+  <div class="s-lbl">投资叙事演变</div>
+  <div class="s-ttl">组合策略解读</div>
+  <div class="s-div"></div>
+</div>
+<div class="narr-grid">
+    <div class="narr-card">
+      <div class="narr-ttl">Q1 2025 · 起点：全球成长核心 + 几乎清仓 Tesla</div>
+      <p>13F 推算 AUM $114.8B，前 50 大持仓覆盖申报约 82%。组合顶部是全球成长股：MELI 6.4%、AMZN 5.8%、SPOT 5.2%、SHOP 4.7%、SE 4.5%、NVDA 4.4%。明显偏新兴市场电商 / 金融科技（MELI、SE、PDD、CPNG、NU）。</p>
+      <p>本季 11 增持 / 39 减持。最大动作是 TSLA 减持 −76% —— Baillie Gifford 当年最著名的 Tesla 持仓被基本清出。同时大减 WIX −43%、MRNA −36%。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q1 → Q2 2025 · AUM +17%，RDDT 暴力加仓</div>
+      <p>AUM $114.8B → $134.2B（+17%）。MELI 升至第一 6.8%，NVDA 升至第二 5.8%。新建 TEM（Tempus AI）。</p>
+      <p>本季最激进的动作是 RDDT 增持 +764%（Reddit 大幅加码）。仍是 11 增 / 39 减的净卖出格局。减持 SHOP −32%、DASH −25%。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q2 → Q3 2025 · 极致净卖出：全季仅 3 笔增持</div>
+      <p>AUM 基本持平 $134.2B → $135.1B（5 季峰值）。NVDA 重回第一 6.4%，SE 升至 5.3%。</p>
+      <p>本季是全期最极端的净卖出 —— 50 只持仓里只有 3 只增持（RKLB +176%、ENSG +96%、DUOL +29%），其余 47 只全在减。对一个"长线持有"标签的机构，这是相当一致的全面收缩。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q3 → Q4 2025 · AXON 暴力建仓、GOOGL 大幅回补</div>
+      <p>AUM $135.1B → $120.3B（−11%）。NVDA 维持第一 6.8%。</p>
+      <p>本季 13 增 / 37 减。两个大动作：AXON 增持 +1,199%（接近从零重建）、GOOGL 增持 +167%。同时大减 DDOG −65%、TTD −23%、NET −23%、TSLA −19%、META −17%。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q4 2025 → Q1 2026 · AUM −19%，转向拉美</div>
+      <p>AUM $120.3B → $97.9B（−19%，5 季最大降幅）。NVDA 升至第一 7.3%，AMZN 第二 6.0%。</p>
+      <p>本季 22 增 / 28 减，增持面回升。方向明确转向拉美：MMYT +191%、BAP（秘鲁 Credicorp）+90%、PBR（巴西石油）+51%、AXON 继续 +50%。同时大减 NFLX −41%、MSFT −30%、CPNG −17%。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">贯穿风格 · 长线成长 + 让赢家奔跑 + 持续净减仓</div>
+      <p>Baillie Gifford 美股 13F 账户的结构特征：① 全球成长 / 颠覆式创新选股，重仓新兴市场电商与金融科技（MELI、SE、NU、PDD、MMYT、BAP）；② NVDA 是"让赢家奔跑"的范例 —— 占比从 4.4% 升到 7.3% 成第一大，但每季都在小幅减持股数，靠股价上涨抬升权重；③ 5 个季度每季减持数都多于增持数，AUM 从峰值 $135B 回落到 $98B —— 持续的净减仓与规模收缩。</p>
+      <p>注：本表为前 50 大持仓（覆盖申报约 80%）。Baillie Gifford 实际持仓数以百计，长尾不在追踪范围内；"AUM"由第一大持仓市值 / 占比反推。</p>
+    </div>
+</div>
+
+</div><!-- .wrap end -->
+
+<div class="footer">
+  <div class="wrap">
+    <span>BAILLIE GIFFORD — 13F HOLDINGS TRACKER (TOP 50)</span>
+    <span>Data: WhaleWisdom / SEC 13F · Generated: 2026-05-17</span>
+  </div>
+</div>
+
+<script>
+function showQ(id, btn) {
+  document.querySelectorAll('.qsec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('qtabs').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+document.addEventListener('DOMContentLoaded', function() {
+  const filters = [
+    {label:'ALL', cls:''},
+    {label:'NEW', cls:'st-new'},
+    {label:'ADDED', cls:'st-add'},
+    {label:'REDUCED', cls:'st-red'},
+    {label:'NO CHANGE', cls:'st-nc'},
+  ];
+  document.querySelectorAll('.tbl-hd').forEach(function(hd) {
+    var txt = hd.querySelector('.tbl-hd-txt');
+    if (!txt || !txt.textContent.includes('Holdings')) return;
+    var table = hd.closest('.tbl-wrap').querySelector('table');
+    if (!table) return;
+    var bar = document.createElement('div');
+    bar.className = 'sfilter-bar';
+    filters.forEach(function(f, i) {
+      var btn = document.createElement('button');
+      btn.className = 'sfbtn' + (i === 0 ? ' active' : '');
+      btn.textContent = f.label;
+      btn.onclick = function() {
+        bar.querySelectorAll('.sfbtn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        table.querySelectorAll('tbody tr').forEach(function(row) {
+          if (!f.cls) { row.style.display = ''; return; }
+          var badge = row.querySelector('.stbadge');
+          row.style.display = (badge && badge.classList.contains(f.cls)) ? '' : 'none';
+        });
+      };
+      bar.appendChild(btn);
+    });
+    hd.appendChild(bar);
+  });
+});
+</script>
+</body>
+</html>
