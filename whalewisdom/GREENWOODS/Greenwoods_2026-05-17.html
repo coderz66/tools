@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greenwoods Asset Management &mdash; 13F Holdings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#F4F2ED;color:#1B2635;font-family:'Karla',sans-serif;font-size:14px;line-height:1.45}
+.masthead{background:#1B2635;border-bottom:3px solid #B8870A;padding:28px 0 24px;position:relative;overflow:hidden}
+.masthead::after{content:'GREENWOODS';position:absolute;right:-20px;bottom:-30px;font-family:'Cormorant Garamond',serif;font-size:150px;font-weight:700;color:rgba(255,255,255,0.04);white-space:nowrap;pointer-events:none;letter-spacing:-2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#B8870A;text-transform:uppercase;margin-bottom:8px}
+.masthead-title{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:700;color:#fff;line-height:1.05;margin-bottom:8px}
+.masthead-title em{color:#D4A017;font-style:italic}
+.masthead-desc{font-size:14px;color:rgba(255,255,255,0.6);font-weight:300;max-width:820px;margin-bottom:12px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7)}
+.pill.amber{border-color:#B8870A;color:#D4A017}
+.stats-bar{background:#fff;border-bottom:1px solid #e2ddd6}
+.stats-bar .wrap{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid #e2ddd6}
+.stat{padding:11px 20px;border-right:1px solid #e2ddd6}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#999;margin-bottom:4px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#1B2635;line-height:1}
+.stat-sub{font-size:11px;color:#aaa;margin-top:3px}
+.section-hd{padding:24px 0 12px}
+.s-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.15em;color:#B8870A;text-transform:uppercase;margin-bottom:4px}
+.s-ttl{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;margin-bottom:6px}
+.s-div{width:44px;height:2px;background:#B8870A;margin-bottom:14px}
+.aum-chart{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:flex-end;padding:18px 20px 14px;background:#fff;border:1px solid #e2ddd6;min-height:180px}
+.aum-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+.aum-bar{width:100%;border-radius:2px 2px 0 0;min-height:4px}
+.aum-bar.solid{background:#1B2635}
+.aum-num{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;color:#1B2635}
+.aum-q{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#999}
+.chart-note{font-family:'JetBrains Mono',monospace;font-size:10px;color:#aaa;margin-top:8px}
+.qtabs{position:sticky;top:0;z-index:100;background:#1B2635;border-bottom:2px solid #B8870A}
+.qtabs .wrap{display:flex;overflow-x:auto;scrollbar-width:none}
+.qbtn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;padding:14px 20px;color:rgba(255,255,255,0.45);background:none;border:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s}
+.qbtn:hover{color:rgba(255,255,255,0.75)}
+.qbtn.active{color:#D4A017;border-bottom-color:#D4A017}
+.qtag{display:inline-block;margin-left:6px;font-size:9px;padding:1px 5px;border-radius:2px;background:rgba(184,135,10,0.2);color:#D4A017}
+.qsec{display:none}
+.qsec.active{display:block}
+.qmeta{background:#fff;border:1px solid #e2ddd6;padding:12px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.qm-lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#999;margin-bottom:2px}
+.qm-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:500;color:#1B2635;line-height:1.1}
+.qm-sub{font-size:11px;color:#aaa;margin-top:2px}
+.tbl-wrap{background:#fff;border:1px solid #e2ddd6;overflow:hidden;margin-bottom:12px}
+.tbl-hd{padding:8px 16px;border-bottom:1px solid #e2ddd6;display:flex;align-items:center;justify-content:space-between}
+.tbl-hd-txt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#777}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#1B2635}
+thead th{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.6);padding:7px 12px;text-align:left;font-weight:400;white-space:nowrap}
+th.r,td.r{text-align:right}
+tbody tr{border-bottom:1px solid #f0ede8;transition:background .1s}
+tbody tr:hover{background:#faf9f6}
+tbody tr.closed{opacity:.45}
+td{padding:6px 12px;vertical-align:middle}
+td.r{font-family:'JetBrains Mono',monospace;font-size:12.5px}
+.tkr{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;color:#1B2635}
+.sbadge{font-size:10px;padding:2px 7px;border-radius:2px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;white-space:nowrap}
+.s-it{background:#dbeafe;color:#1d4ed8}
+.s-en{background:#fef3c7;color:#92400e}
+.s-fi{background:#dcfce7;color:#166534}
+.s-ut{background:#f3e8ff;color:#7e22ce}
+.s-cd{background:#fee2e2;color:#991b1b}
+.s-in{background:#e0f2fe;color:#0369a1}
+.s-hc{background:#fce7f3;color:#9d174d}
+.s-re{background:#d1fae5;color:#065f46}
+.s-cm{background:#ccfbf1;color:#0f766e}
+.s-cs{background:#ecfccb;color:#4d7c0f}
+.s-ma{background:#e7e5e4;color:#57534e}
+.s-tr{background:#e0e7ff;color:#4338ca}
+.pbar-row{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.pbar{height:4px;background:#1B2635;border-radius:2px;min-width:2px;flex-shrink:0}
+.pval{font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap}
+.stbadge{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.04em;text-transform:uppercase}
+.st-new{background:rgba(184,135,10,.12);color:#92400e}
+.st-add{background:rgba(22,163,74,.1);color:#166534}
+.st-red{background:rgba(234,88,12,.1);color:#c2410c}
+.st-cls{background:rgba(220,38,38,.1);color:#991b1b}
+.st-nc{background:rgba(100,116,139,.1);color:#475569}
+.ch-new{color:#B8870A;font-weight:600}
+.ch-add{color:#16a34a}
+.ch-neg{color:#dc2626}
+.ch-nc{color:#888}
+.sfilter-bar{display:flex;gap:5px;flex-shrink:0}
+.sfbtn{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 9px;border-radius:2px;border:1px solid #d4cfc8;background:transparent;color:#aaa;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
+.sfbtn:hover{border-color:#B8870A;color:#B8870A}
+.sfbtn.active{background:#1B2635;color:#fff;border-color:#1B2635}
+.narr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.narr-card{background:#fff;border:1px solid #e2ddd6;border-left:3px solid #B8870A;padding:14px 16px}
+.narr-ttl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#B8870A;margin-bottom:6px}
+.narr-card p{font-size:13px;line-height:1.55;color:#333}
+.narr-card p+p{margin-top:5px}
+.footer{background:#1B2635;padding:16px 0;margin-top:32px;border-top:1px solid rgba(255,255,255,.08)}
+.footer .wrap{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.35);letter-spacing:.06em}
+@media(max-width:768px){
+  .stats-bar .wrap{grid-template-columns:repeat(2,1fr)}
+  .narr-grid{grid-template-columns:1fr}
+  .qmeta{grid-template-columns:repeat(2,1fr)}
+  .masthead-title{font-size:36px}
+  .aum-chart{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Institutional Holdings &middot; WhaleWisdom &middot; SEC 13F Filings</div>
+    <h1 class="masthead-title">Greenwoods <em>Asset Management</em></h1>
+    <p class="masthead-desc">聚焦中国的资产管理机构（景林）的 13F 美股账户。中概 ADR 核心 + 美股科技龙头，持仓极度集中。5 季度持仓演变（Q1 2025 → Q1 2026），13F 推算 AUM $3.23B → $3.88B，峰值 $4.44B。注：港股 / A 股持仓不在 13F 申报范围内。</p>
+    <div class="pills">
+      <span class="pill amber">China-Focused</span>
+      <span class="pill">ADR Core</span>
+      <span class="pill">US Tech Overlay</span>
+      <span class="pill">Highly Concentrated</span>
+      <span class="pill">5 Quarters Tracked</span>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="wrap">
+    <div class="stat">
+      <div class="stat-lbl">最新 AUM（Q1 2026）</div>
+      <div class="stat-val">$3.88B</div>
+      <div class="stat-sub">vs Q4'25 -4%</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">季度 AUM 峰值</div>
+      <div class="stat-val">$4.44B</div>
+      <div class="stat-sub">Q3 2025</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">追踪季度数</div>
+      <div class="stat-val">5Q</div>
+      <div class="stat-sub">2025-03-31 → 2026-03-31</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">核心持仓</div>
+      <div class="stat-val" style="font-size:22px;padding-top:3px">GOOGL</div>
+      <div class="stat-sub">21.66% · Alphabet · 第一大仓</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="section-hd">
+    <div class="s-lbl">资产规模演变</div>
+    <div class="s-ttl">AUM 轨迹</div>
+    <div class="s-div"></div>
+    <div class="aum-chart">
+      <div class="aum-col">
+        <div class="aum-num">$3.23B</div>
+        <div class="aum-bar solid" style="height:73px"></div>
+        <div class="aum-q">2025-03-31</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$2.87B</div>
+        <div class="aum-bar solid" style="height:65px"></div>
+        <div class="aum-q">2025-06-30</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$4.44B</div>
+        <div class="aum-bar solid" style="height:100px"></div>
+        <div class="aum-q">2025-09-30</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$4.04B</div>
+        <div class="aum-bar solid" style="height:91px"></div>
+        <div class="aum-q">2025-12-31</div>
+      </div>
+      <div class="aum-col">
+        <div class="aum-num">$3.88B</div>
+        <div class="aum-bar solid" style="height:87px"></div>
+        <div class="aum-q">2026-03-31</div>
+      </div>
+    </div>
+    <div class="chart-note">AUM 由第一大持仓市值 / 占比反推；仅含 13F 美股申报，港股 / A 股不在内</div>
+  </div>
+</div>
+
+<div class="qtabs" id="qtabs">
+  <div class="wrap">
+    <button class="qbtn active" onclick="showQ('q1-2026',this)">2026-03-31 <span class="qtag">Q1</span></button>
+    <button class="qbtn" onclick="showQ('q4-2025',this)">2025-12-31 <span class="qtag">Q4</span></button>
+    <button class="qbtn" onclick="showQ('q3-2025',this)">2025-09-30 <span class="qtag">Q3</span></button>
+    <button class="qbtn" onclick="showQ('q2-2025',this)">2025-06-30 <span class="qtag">Q2</span></button>
+    <button class="qbtn" onclick="showQ('q1-2025',this)">2025-03-31 <span class="qtag">Q1'25</span></button>
+  </div>
+</div>
+
+<div class="wrap" style="padding-top:16px;padding-bottom:36px">
+
+<div class="qsec" id="q1-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-03-31</div><div class="qm-sub">Q1 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$3.23B</div><div class="qm-sub">首份追踪季度</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">25 / 0</div><div class="qm-sub">首份申报</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">META</div><div class="qm-sub">17.31% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-03-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">969,277</td><td class="r">$559M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">17.31%</span></div></td><td class="r">16.26%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+90,313</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">4,635,519</td><td class="r">$549M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:53px"></div><span class="pval">17.00%</span></div></td><td class="r">14.20%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">NTES</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,575,098</td><td class="r">$368M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:36px"></div><span class="pval">11.40%</span></div></td><td class="r">10.24%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−57,772</td></tr>
+        <tr><td><span class="tkr">YMM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">25,995,141</td><td class="r">$332M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:32px"></div><span class="pval">10.28%</span></div></td><td class="r">8.89%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−24,662</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,574,557</td><td class="r">$261M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">8.10%</span></div></td><td class="r">7.77%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+329,607</td></tr>
+        <tr><td><span class="tkr">FUTU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,901,635</td><td class="r">$195M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:19px"></div><span class="pval">6.03%</span></div></td><td class="r">3.24%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+618,701</td></tr>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">782,255</td><td class="r">$174M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:17px"></div><span class="pval">5.38%</span></div></td><td class="r">5.89%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+37,947</td></tr>
+        <tr><td><span class="tkr">ZTO</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">6,557,350</td><td class="r">$130M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:13px"></div><span class="pval">4.03%</span></div></td><td class="r">4.09%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−59,727</td></tr>
+        <tr><td><span class="tkr">QFIN</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">2,688,992</td><td class="r">$121M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">3.74%</span></div></td><td class="r">3.26%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">BEKE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">4,771,806</td><td class="r">$96M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">2.97%</span></div></td><td class="r">0.32%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+4,228,006</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">601,142</td><td class="r">$79M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">2.46%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+601,142</td></tr>
+        <tr><td><span class="tkr">EDU</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,396,039</td><td class="r">$67M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">2.07%</span></div></td><td class="r">2.49%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+167,721</td></tr>
+        <tr><td><span class="tkr">INTC</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,179,995</td><td class="r">$50M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.53%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+2,179,995</td></tr>
+        <tr><td><span class="tkr">DQ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,672,161</td><td class="r">$48M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.50%</span></div></td><td class="r">1.67%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−42,619</td></tr>
+        <tr><td><span class="tkr">YNDX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,218,014</td><td class="r">$47M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.45%</span></div></td><td class="r">2.77%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−941,762</td></tr>
+        <tr><td><span class="tkr">TAL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,448,817</td><td class="r">$32M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.00%</span></div></td><td class="r">1.05%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−872,138</td></tr>
+        <tr><td><span class="tkr">TCOM</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">383,543</td><td class="r">$24M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.76%</span></div></td><td class="r">0.38%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+208,307</td></tr>
+        <tr><td><span class="tkr">JKS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">780,933</td><td class="r">$15M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.45%</span></div></td><td class="r">0.45%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+211,000</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">90,734</td><td class="r">$12M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.37%</span></div></td><td class="r">0.71%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−121,835</td></tr>
+        <tr><td><span class="tkr">HSAI</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">748,553</td><td class="r">$11M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.34%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+748,553</td></tr>
+        <tr><td><span class="tkr">FWONK</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">122,645</td><td class="r">$11M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.34%</span></div></td><td class="r">1.17%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−275,948</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">28,650</td><td class="r">$11M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.33%</span></div></td><td class="r">2.37%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−149,283</td></tr>
+        <tr><td><span class="tkr">CSIQ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,115,861</td><td class="r">$10M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.30%</span></div></td><td class="r">0.24%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+420,000</td></tr>
+        <tr><td><span class="tkr">GOOGL</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">45,990</td><td class="r">$7M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.22%</span></div></td><td class="r">3.00%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−455,309</td></tr>
+        <tr><td><span class="tkr">HDL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">268,341</td><td class="r">$6M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.19%</span></div></td><td class="r">0.25%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−6,959</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q2-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-06-30</div><div class="qm-sub">Q2 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$2.87B</div><div class="qm-sub">vs $3.23B Q1 (-11%)</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">25 / 4</div><div class="qm-sub">本季清仓 4 只</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">META</div><div class="qm-sub">25.46% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-06-30</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">991,342</td><td class="r">$732M</td><td class="r">$559M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">25.46%</span></div></td><td class="r">17.31%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+22,065</td></tr>
+        <tr><td><span class="tkr">NTES</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,486,000</td><td class="r">$469M</td><td class="r">$368M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:35px"></div><span class="pval">16.33%</span></div></td><td class="r">11.40%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−89,098</td></tr>
+        <tr><td><span class="tkr">YMM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">28,794,527</td><td class="r">$340M</td><td class="r">$332M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">11.83%</span></div></td><td class="r">10.28%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,799,386</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">3,219,839</td><td class="r">$337M</td><td class="r">$549M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:25px"></div><span class="pval">11.73%</span></div></td><td class="r">17.00%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,415,680</td></tr>
+        <tr><td><span class="tkr">FUTU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,531,389</td><td class="r">$189M</td><td class="r">$195M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:14px"></div><span class="pval">6.59%</span></div></td><td class="r">6.03%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−370,246</td></tr>
+        <tr><td><span class="tkr">QFIN</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">3,295,438</td><td class="r">$143M</td><td class="r">$121M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:11px"></div><span class="pval">4.97%</span></div></td><td class="r">3.74%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+606,446</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">630,440</td><td class="r">$100M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:7px"></div><span class="pval">3.47%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+630,440</td></tr>
+        <tr><td><span class="tkr">BEKE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">4,640,706</td><td class="r">$82M</td><td class="r">$96M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">2.86%</span></div></td><td class="r">2.97%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−131,100</td></tr>
+        <tr><td><span class="tkr">EDU</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,328,218</td><td class="r">$72M</td><td class="r">$67M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">2.49%</span></div></td><td class="r">2.07%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−67,821</td></tr>
+        <tr><td><span class="tkr">YNDX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,276,303</td><td class="r">$71M</td><td class="r">$47M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">2.46%</span></div></td><td class="r">1.45%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−941,711</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">465,000</td><td class="r">$53M</td><td class="r">$79M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.84%</span></div></td><td class="r">2.46%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−136,142</td></tr>
+        <tr><td><span class="tkr">INTC</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,035,073</td><td class="r">$46M</td><td class="r">$50M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.59%</span></div></td><td class="r">1.53%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−144,922</td></tr>
+        <tr><td><span class="tkr">DQ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,672,161</td><td class="r">$41M</td><td class="r">$48M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.41%</span></div></td><td class="r">1.50%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">GOOGL</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">184,942</td><td class="r">$33M</td><td class="r">$7M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">1.13%</span></div></td><td class="r">0.22%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+138,952</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">131,264</td><td class="r">$30M</td><td class="r">$261M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">1.03%</span></div></td><td class="r">8.10%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,443,293</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">179,759</td><td class="r">$29M</td><td class="r">$12M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">1.00%</span></div></td><td class="r">0.37%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+89,025</td></tr>
+        <tr><td><span class="tkr">TAL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,671,361</td><td class="r">$27M</td><td class="r">$32M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.95%</span></div></td><td class="r">1.00%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+222,544</td></tr>
+        <tr><td><span class="tkr">TCOM</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">377,500</td><td class="r">$22M</td><td class="r">$24M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.77%</span></div></td><td class="r">0.76%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−6,043</td></tr>
+        <tr><td><span class="tkr">JKS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">780,933</td><td class="r">$17M</td><td class="r">$15M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.58%</span></div></td><td class="r">0.45%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">28,650</td><td class="r">$14M</td><td class="r">$11M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.50%</span></div></td><td class="r">0.33%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">ATAT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">210,700</td><td class="r">$7M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.24%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+210,700</td></tr>
+        <tr><td><span class="tkr">HTHT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">176,800</td><td class="r">$6M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.21%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+176,800</td></tr>
+        <tr><td><span class="tkr">HDL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">268,341</td><td class="r">$5M</td><td class="r">$6M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.18%</span></div></td><td class="r">0.19%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">ONC</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">15,502</td><td class="r">$4M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.13%</span></div></td><td class="r">0.08%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+6,173</td></tr>
+        <tr><td><span class="tkr">CSIQ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">335,183</td><td class="r">$4M</td><td class="r">$10M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.13%</span></div></td><td class="r">0.30%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−780,678</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Closed Out &mdash; Q1 2025（4 只）</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr class="closed"><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">5.38%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−782,255</td></tr>
+        <tr class="closed"><td><span class="tkr">ZTO</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">4.03%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−6,557,350</td></tr>
+        <tr class="closed"><td><span class="tkr">HSAI</span></td><td><span class="sbadge s-in">Industrials</span></td><td class="r">0.34%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−748,553</td></tr>
+        <tr class="closed"><td><span class="tkr">FWONK</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">0.34%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−122,645</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q3-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-09-30</div><div class="qm-sub">Q3 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$4.44B</div><div class="qm-sub">vs $2.87B Q2 (+55%)</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">25 / 7</div><div class="qm-sub">本季清仓 7 只</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">META</div><div class="qm-sub">20.27% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-09-30</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,225,964</td><td class="r">$900M</td><td class="r">$732M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">20.27%</span></div></td><td class="r">25.46%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+234,622</td></tr>
+        <tr><td><span class="tkr">NTES</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,212,200</td><td class="r">$488M</td><td class="r">$469M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:29px"></div><span class="pval">10.99%</span></div></td><td class="r">16.33%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−273,800</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,378,757</td><td class="r">$444M</td><td class="r">$100M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:27px"></div><span class="pval">9.99%</span></div></td><td class="r">3.47%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,748,317</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">3,356,964</td><td class="r">$444M</td><td class="r">$337M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:27px"></div><span class="pval">9.99%</span></div></td><td class="r">11.73%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+137,125</td></tr>
+        <tr><td><span class="tkr">GOOGL</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,760,320</td><td class="r">$428M</td><td class="r">$33M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:26px"></div><span class="pval">9.64%</span></div></td><td class="r">1.13%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,575,378</td></tr>
+        <tr><td><span class="tkr">YMM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">28,597,879</td><td class="r">$371M</td><td class="r">$340M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:22px"></div><span class="pval">8.35%</span></div></td><td class="r">11.83%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−196,648</td></tr>
+        <tr><td><span class="tkr">FUTU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">996,348</td><td class="r">$173M</td><td class="r">$189M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">3.90%</span></div></td><td class="r">6.59%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−535,041</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">843,409</td><td class="r">$151M</td><td class="r">$53M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">3.39%</span></div></td><td class="r">1.84%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+378,409</td></tr>
+        <tr><td><span class="tkr">YNDX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1,276,303</td><td class="r">$143M</td><td class="r">$71M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">3.23%</span></div></td><td class="r">2.46%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">QFIN</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">3,295,438</td><td class="r">$95M</td><td class="r">$143M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">2.14%</span></div></td><td class="r">4.97%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">ATAT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,290,136</td><td class="r">$86M</td><td class="r">$7M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.94%</span></div></td><td class="r">0.24%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+2,079,436</td></tr>
+        <tr><td><span class="tkr">SNPS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">165,459</td><td class="r">$82M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.84%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+165,459</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">411,144</td><td class="r">$73M</td><td class="r">$29M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.65%</span></div></td><td class="r">1.00%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+231,385</td></tr>
+        <tr><td><span class="tkr">EDU</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,328,218</td><td class="r">$70M</td><td class="r">$72M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.59%</span></div></td><td class="r">2.49%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">BEKE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">3,676,995</td><td class="r">$70M</td><td class="r">$82M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.57%</span></div></td><td class="r">2.86%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−963,711</td></tr>
+        <tr><td><span class="tkr">INTC</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,896,037</td><td class="r">$64M</td><td class="r">$46M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.43%</span></div></td><td class="r">1.59%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−139,036</td></tr>
+        <tr><td><span class="tkr">UNH</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">167,432</td><td class="r">$58M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.30%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+167,432</td></tr>
+        <tr><td><span class="tkr">XBI</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">555,015</td><td class="r">$56M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.25%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+555,015</td></tr>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">213,104</td><td class="r">$54M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.22%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+213,104</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">131,264</td><td class="r">$37M</td><td class="r">$30M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.83%</span></div></td><td class="r">1.03%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">TAL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,597,180</td><td class="r">$29M</td><td class="r">$27M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.66%</span></div></td><td class="r">0.95%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−74,181</td></tr>
+        <tr><td><span class="tkr">WRD</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,684,200</td><td class="r">$27M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.60%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+2,684,200</td></tr>
+        <tr><td><span class="tkr">MMYT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">256,900</td><td class="r">$24M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.54%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+256,900</td></tr>
+        <tr><td><span class="tkr">UBER</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">244,670</td><td class="r">$24M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.54%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+244,670</td></tr>
+        <tr><td><span class="tkr">JKS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">780,933</td><td class="r">$19M</td><td class="r">$17M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.42%</span></div></td><td class="r">0.58%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Closed Out &mdash; Q2 2025（7 只）</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr class="closed"><td><span class="tkr">DQ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1.41%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−2,672,161</td></tr>
+        <tr class="closed"><td><span class="tkr">TCOM</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">0.77%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−377,500</td></tr>
+        <tr class="closed"><td><span class="tkr">MSFT</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.50%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−28,650</td></tr>
+        <tr class="closed"><td><span class="tkr">HTHT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">0.21%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−176,800</td></tr>
+        <tr class="closed"><td><span class="tkr">HDL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">0.18%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−268,341</td></tr>
+        <tr class="closed"><td><span class="tkr">ONC</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">0.13%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−15,502</td></tr>
+        <tr class="closed"><td><span class="tkr">CSIQ</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.13%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−335,183</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec" id="q4-2025">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2025-12-31</div><div class="qm-sub">Q4 2025</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$4.04B</div><div class="qm-sub">vs $4.44B Q3 (-9%)</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">25 / 2</div><div class="qm-sub">本季清仓 2 只</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">GOOGL</div><div class="qm-sub">20.82% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2025-12-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">GOOGL</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,690,000</td><td class="r">$842M</td><td class="r">$428M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">20.82%</span></div></td><td class="r">9.64%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+929,680</td></tr>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">996,908</td><td class="r">$658M</td><td class="r">$900M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:42px"></div><span class="pval">16.27%</span></div></td><td class="r">20.27%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−229,056</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">3,968,270</td><td class="r">$450M</td><td class="r">$444M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:29px"></div><span class="pval">11.12%</span></div></td><td class="r">9.99%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+611,306</td></tr>
+        <tr><td><span class="tkr">NTES</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,212,200</td><td class="r">$442M</td><td class="r">$488M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:28px"></div><span class="pval">10.93%</span></div></td><td class="r">10.99%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">YMM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">28,597,879</td><td class="r">$307M</td><td class="r">$371M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:20px"></div><span class="pval">7.59%</span></div></td><td class="r">8.35%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">FUTU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,135,821</td><td class="r">$187M</td><td class="r">$173M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:12px"></div><span class="pval">4.61%</span></div></td><td class="r">3.90%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+139,473</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">837,907</td><td class="r">$156M</td><td class="r">$444M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:10px"></div><span class="pval">3.86%</span></div></td><td class="r">9.99%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,540,850</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">843,409</td><td class="r">$124M</td><td class="r">$151M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">3.06%</span></div></td><td class="r">3.39%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">INTC</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,590,400</td><td class="r">$96M</td><td class="r">$64M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">2.36%</span></div></td><td class="r">1.43%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+694,363</td></tr>
+        <tr><td><span class="tkr">ATAT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,290,136</td><td class="r">$90M</td><td class="r">$86M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">2.23%</span></div></td><td class="r">1.94%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">AVGO</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">245,800</td><td class="r">$85M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">2.10%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+245,800</td></tr>
+        <tr><td><span class="tkr">SNPS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">163,661</td><td class="r">$77M</td><td class="r">$82M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.90%</span></div></td><td class="r">1.84%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,798</td></tr>
+        <tr><td><span class="tkr">EDU</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,328,218</td><td class="r">$73M</td><td class="r">$70M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.81%</span></div></td><td class="r">1.59%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">QFIN</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">3,295,438</td><td class="r">$64M</td><td class="r">$95M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.57%</span></div></td><td class="r">2.14%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">213,104</td><td class="r">$58M</td><td class="r">$54M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.43%</span></div></td><td class="r">1.22%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">YNDX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">638,103</td><td class="r">$53M</td><td class="r">$143M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.32%</span></div></td><td class="r">3.23%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−638,200</td></tr>
+        <tr><td><span class="tkr">UNH</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">130,310</td><td class="r">$43M</td><td class="r">$58M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.06%</span></div></td><td class="r">1.30%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−37,122</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">324,147</td><td class="r">$41M</td><td class="r">$73M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.02%</span></div></td><td class="r">1.65%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−86,997</td></tr>
+        <tr><td><span class="tkr">HTHT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">842,822</td><td class="r">$40M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">0.98%</span></div></td><td class="r">0.32%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+482,822</td></tr>
+        <tr><td><span class="tkr">TAL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,597,180</td><td class="r">$28M</td><td class="r">$29M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.70%</span></div></td><td class="r">0.66%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">BEKE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1,793,195</td><td class="r">$28M</td><td class="r">$70M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.70%</span></div></td><td class="r">1.57%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−1,883,800</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">89,826</td><td class="r">$27M</td><td class="r">$37M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.67%</span></div></td><td class="r">0.83%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−41,438</td></tr>
+        <tr><td><span class="tkr">MMYT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">256,900</td><td class="r">$21M</td><td class="r">$24M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.52%</span></div></td><td class="r">0.54%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">JKS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">780,933</td><td class="r">$20M</td><td class="r">$19M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.50%</span></div></td><td class="r">0.42%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">WRD</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,201,800</td><td class="r">$19M</td><td class="r">$27M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.47%</span></div></td><td class="r">0.60%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−482,400</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Closed Out &mdash; Q3 2025（2 只）</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr class="closed"><td><span class="tkr">XBI</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">1.25%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−555,015</td></tr>
+        <tr class="closed"><td><span class="tkr">UBER</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">0.54%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−244,670</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qsec active" id="q1-2026">
+  <div class="qmeta">
+    <div><div class="qm-lbl">Filing Quarter</div><div class="qm-val">2026-03-31</div><div class="qm-sub">Q1 2026</div></div>
+    <div><div class="qm-lbl">13F AUM (推算)</div><div class="qm-val">$3.88B</div><div class="qm-sub">vs $4.04B Q4 (-4%)</div></div>
+    <div><div class="qm-lbl">Active / Closed</div><div class="qm-val">25 / 5</div><div class="qm-sub">本季清仓 5 只</div></div>
+    <div><div class="qm-lbl">Top Position</div><div class="qm-val">GOOGL</div><div class="qm-sub">21.66% · 最大单一仓位</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Active Holdings &mdash; 2026-03-31</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">Shares</th><th class="r">Market Value</th><th class="r">Prev MV</th><th class="r">% Portfolio</th><th class="r">Prev %</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tkr">GOOGL</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">2,921,634</td><td class="r">$840M</td><td class="r">$842M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:54px"></div><span class="pval">21.66%</span></div></td><td class="r">20.82%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+231,634</td></tr>
+        <tr><td><span class="tkr">PDD</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">5,103,804</td><td class="r">$522M</td><td class="r">$450M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:34px"></div><span class="pval">13.45%</span></div></td><td class="r">11.12%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+1,135,534</td></tr>
+        <tr><td><span class="tkr">NTES</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">3,190,000</td><td class="r">$357M</td><td class="r">$442M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:23px"></div><span class="pval">9.21%</span></div></td><td class="r">10.93%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−22,200</td></tr>
+        <tr><td><span class="tkr">YMM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">40,957,519</td><td class="r">$340M</td><td class="r">$307M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:22px"></div><span class="pval">8.77%</span></div></td><td class="r">7.59%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+12,359,640</td></tr>
+        <tr><td><span class="tkr">META</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">541,689</td><td class="r">$310M</td><td class="r">$658M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:20px"></div><span class="pval">7.99%</span></div></td><td class="r">16.27%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−455,219</td></tr>
+        <tr><td><span class="tkr">INTC</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">6,923,236</td><td class="r">$306M</td><td class="r">$96M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:20px"></div><span class="pval">7.88%</span></div></td><td class="r">2.36%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+4,332,836</td></tr>
+        <tr><td><span class="tkr">AMZN</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,004,700</td><td class="r">$209M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:13px"></div><span class="pval">5.40%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+1,004,700</td></tr>
+        <tr><td><span class="tkr">FUTU</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">996,348</td><td class="r">$136M</td><td class="r">$187M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">3.51%</span></div></td><td class="r">4.61%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−139,473</td></tr>
+        <tr><td><span class="tkr">NVDA</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">762,748</td><td class="r">$133M</td><td class="r">$156M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:9px"></div><span class="pval">3.43%</span></div></td><td class="r">3.86%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−75,159</td></tr>
+        <tr><td><span class="tkr">TCOM</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,604,281</td><td class="r">$130M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:8px"></div><span class="pval">3.34%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+2,604,281</td></tr>
+        <tr><td><span class="tkr">ATAT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,591,136</td><td class="r">$95M</td><td class="r">$90M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">2.46%</span></div></td><td class="r">2.23%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+301,000</td></tr>
+        <tr><td><span class="tkr">BABA</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">703,009</td><td class="r">$88M</td><td class="r">$124M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:6px"></div><span class="pval">2.27%</span></div></td><td class="r">3.06%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−140,400</td></tr>
+        <tr><td><span class="tkr">EDU</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,328,218</td><td class="r">$75M</td><td class="r">$73M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:5px"></div><span class="pval">1.94%</span></div></td><td class="r">1.81%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">AAPL</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">248,368</td><td class="r">$63M</td><td class="r">$58M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:4px"></div><span class="pval">1.63%</span></div></td><td class="r">1.43%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+35,264</td></tr>
+        <tr><td><span class="tkr">HTHT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">1,063,181</td><td class="r">$53M</td><td class="r">$40M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.38%</span></div></td><td class="r">0.98%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+220,359</td></tr>
+        <tr><td><span class="tkr">QFIN</span></td><td><span class="sbadge s-fi">Finance</span></td><td class="r">3,295,438</td><td class="r">$43M</td><td class="r">$64M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.10%</span></div></td><td class="r">1.57%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">SE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">488,048</td><td class="r">$40M</td><td class="r">$41M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:3px"></div><span class="pval">1.04%</span></div></td><td class="r">1.02%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+163,901</td></tr>
+        <tr><td><span class="tkr">UNH</span></td><td><span class="sbadge s-hc">Health Care</span></td><td class="r">130,310</td><td class="r">$35M</td><td class="r">$43M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.91%</span></div></td><td class="r">1.06%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">TSM</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">83,052</td><td class="r">$28M</td><td class="r">$27M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.72%</span></div></td><td class="r">0.67%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−6,774</td></tr>
+        <tr><td><span class="tkr">TAL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">2,448,817</td><td class="r">$28M</td><td class="r">$28M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:2px"></div><span class="pval">0.72%</span></div></td><td class="r">0.70%</td><td><span class="stbadge st-red">REDUCED</span></td><td class="r ch-neg">−148,363</td></tr>
+        <tr><td><span class="tkr">WRD</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2,201,800</td><td class="r">$18M</td><td class="r">$19M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.46%</span></div></td><td class="r">0.47%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">MMYT</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">388,557</td><td class="r">$14M</td><td class="r">$21M</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.37%</span></div></td><td class="r">0.52%</td><td><span class="stbadge st-add">ADDED</span></td><td class="r ch-add">+131,657</td></tr>
+        <tr><td><span class="tkr">LITE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">10,822</td><td class="r">$8M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.20%</span></div></td><td class="r">&mdash;</td><td><span class="stbadge st-new">NEW</span></td><td class="r ch-new">+10,822</td></tr>
+        <tr><td><span class="tkr">HDL</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">268,341</td><td class="r">$4M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.10%</span></div></td><td class="r">0.11%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+        <tr><td><span class="tkr">RERE</span></td><td><span class="sbadge s-cd">Consumer Disc</span></td><td class="r">525,000</td><td class="r">$2M</td><td class="r">&mdash;</td><td class="r"><div class="pbar-row"><div class="pbar" style="width:1px"></div><span class="pval">0.06%</span></div></td><td class="r">0.07%</td><td><span class="stbadge st-nc">NO CHANGE</span></td><td class="r ch-nc">&mdash;</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-hd"><span class="tbl-hd-txt">Closed Out &mdash; Q4 2025（5 只）</span></div>
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th class="r">上季 % Portfolio</th><th>Status</th><th class="r">Δ Shares</th></tr></thead>
+      <tbody>
+        <tr class="closed"><td><span class="tkr">AVGO</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">2.10%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−245,800</td></tr>
+        <tr class="closed"><td><span class="tkr">SNPS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">1.90%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−163,661</td></tr>
+        <tr class="closed"><td><span class="tkr">YNDX</span></td><td><span class="sbadge s-cm">Communications</span></td><td class="r">1.32%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−638,103</td></tr>
+        <tr class="closed"><td><span class="tkr">BEKE</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.70%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−1,793,195</td></tr>
+        <tr class="closed"><td><span class="tkr">JKS</span></td><td><span class="sbadge s-it">Info Tech</span></td><td class="r">0.50%</td><td><span class="stbadge st-cls">CLOSED</span></td><td class="r ch-neg">−780,933</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section-hd">
+  <div class="s-lbl">投资叙事演变</div>
+  <div class="s-ttl">组合策略解读</div>
+  <div class="s-div"></div>
+</div>
+<div class="narr-grid">
+    <div class="narr-card">
+      <div class="narr-ttl">Q1 2025 · 起点：中概核心 + 美股科技</div>
+      <p>13F 推算 AUM $3.23B，25 只持仓高度集中（前 5 大占 64%）。组合是典型的"聚焦中国"配置：META 17.3%、PDD 17.0%、NTES 11.4%、YMM 10.3%（满帮）、TSM 8.1%、FUTU 6.0%（富途）。</p>
+      <p>本季新建 BABA、INTC、HSAI。组合一半以上是中概 ADR（PDD / NTES / YMM / FUTU / BABA / ZTO），另一半是美股科技与半导体（META / AAPL / TSM）。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q1 → Q2 2025 · META 加到 25.5%，AUM 缩水</div>
+      <p>AUM $3.23B → $2.87B（−11%）。META 大幅加仓至 25.5% —— 单一仓位占四分之一，集中度推到极致；NTES 升至 16.3%。前 5 大占 72%。</p>
+      <p>本季新建 NVDA、ATAT、HTHT；清仓 AAPL（5.4%）、ZTO（4.0%）、HSAI、FWONK。把美股仓位从 AAPL 切换到 NVDA。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q2 → Q3 2025 · AUM 大增，GOOGL / NVDA 进场</div>
+      <p>AUM $2.87B → $4.44B（+55%，5 季峰值）。NVDA 加仓至 10.0%，GOOGL 首次进入前列 9.6%。</p>
+      <p>本季最活跃 —— 一口气新建 7 只（SNPS、UNH、XBI、AAPL 回补、WRD、MMYT、UBER），清仓 7 只（DQ、TCOM、MSFT、HTHT、HDL、ONC、CSIQ）。组合从纯中概向"中概 + 美股 AI"扩张。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q3 → Q4 2025 · GOOGL 登顶第一大持仓</div>
+      <p>AUM $4.44B → $4.04B（−9%）。GOOGL 加仓 +53% 升至第一 20.8%，超过 META（16.3%）。</p>
+      <p>本季仅新建 AVGO、清仓 XBI / UBER —— 换手大幅放缓。组合顶部由"META 独大"切换成"GOOGL + META 双核"。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">Q4 2025 → Q1 2026 · META 腰斩、重仓押注 INTC</div>
+      <p>AUM $4.04B → $3.88B（−4%）。GOOGL 继续加仓至 21.7% 稳居第一；META 减持 −46%、占比从 16.3% 砍到 8.0%。</p>
+      <p>最大动作是 INTC 增持 +167% 至 7.9% —— 一个明确的 Intel 拐点押注。新建 AMZN（5.4%）、TCOM、LITE；清仓 AVGO（建仓仅一季即清）、SNPS、YNDX、BEKE、JKS。</p>
+    </div>
+    <div class="narr-card">
+      <div class="narr-ttl">贯穿风格 · 聚焦中国 + 美股科技、围绕龙头大开大合</div>
+      <p>Greenwoods（景林）美股 13F 账户的结构特征：① 持仓极度集中 —— 常年仅 25 只、前 5 大占 60–72%；② 双引擎 —— 中概 ADR 核心（PDD / NTES / YMM / FUTU）+ 美股科技龙头（META / GOOGL / NVDA / INTC）；③ 围绕少数龙头大开大合 —— META 从 25.5% 砍到 8%、GOOGL 从无到 21.7% 登顶、INTC 一季加 167%。</p>
+      <p>换手集中在头部仓位的权重再分配，而非广撒网。注：本表为 13F 美股申报，Greenwoods 的港股 / A 股持仓不在其中；"AUM"由第一大持仓市值 / 占比反推。</p>
+    </div>
+</div>
+
+</div><!-- .wrap end -->
+
+<div class="footer">
+  <div class="wrap">
+    <span>GREENWOODS ASSET MANAGEMENT — 13F HOLDINGS TRACKER</span>
+    <span>Data: WhaleWisdom / SEC 13F · Generated: 2026-05-17</span>
+  </div>
+</div>
+
+<script>
+function showQ(id, btn) {
+  document.querySelectorAll('.qsec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('qtabs').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+document.addEventListener('DOMContentLoaded', function() {
+  const filters = [
+    {label:'ALL', cls:''},
+    {label:'NEW', cls:'st-new'},
+    {label:'ADDED', cls:'st-add'},
+    {label:'REDUCED', cls:'st-red'},
+    {label:'NO CHANGE', cls:'st-nc'},
+  ];
+  document.querySelectorAll('.tbl-hd').forEach(function(hd) {
+    var txt = hd.querySelector('.tbl-hd-txt');
+    if (!txt || !txt.textContent.includes('Active Holdings')) return;
+    var table = hd.closest('.tbl-wrap').querySelector('table');
+    if (!table) return;
+    var bar = document.createElement('div');
+    bar.className = 'sfilter-bar';
+    filters.forEach(function(f, i) {
+      var btn = document.createElement('button');
+      btn.className = 'sfbtn' + (i === 0 ? ' active' : '');
+      btn.textContent = f.label;
+      btn.onclick = function() {
+        bar.querySelectorAll('.sfbtn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        table.querySelectorAll('tbody tr').forEach(function(row) {
+          if (!f.cls) { row.style.display = ''; return; }
+          var badge = row.querySelector('.stbadge');
+          row.style.display = (badge && badge.classList.contains(f.cls)) ? '' : 'none';
+        });
+      };
+      bar.appendChild(btn);
+    });
+    hd.appendChild(bar);
+  });
+});
+</script>
+</body>
+</html>
